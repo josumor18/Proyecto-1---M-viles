@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@drawable/login_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp">
+
+            <ImageView
+                android:id="@+id/imgLogoFluxme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp"
+                app:srcCompat="@mipmap/ic_launcher" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/rlImage"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/strIniciarSesion"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtUsernameLogin"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@android:color/background_light"
+                android:ems="10"
+                android:hint="@string/strUsername"
+                android:inputType="textPersonName"
+                android:singleLine="true"/>
+
+            <EditText
+                android:id="@+id/edtPasswordLogin"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@android:color/background_light"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:id="@+id/chckSesionActiva"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="true"
+                android:text="@string/strSesionActiva"/>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/colorBtnLogin"
+                android:onClick="loginClicked"
+                android:text="@string/strIniciarSesion"
+                android:textColor="@android:color/background_light" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="o"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/infoRegistrar"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_dark" />
+
+            <TextView
+                android:id="@+id/txtRegistrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:clickable="true"
+                android:onClick="signinClicked"
+                android:text="@string/strRegistrateAqui"
+                android:textAlignment="center"
+                android:textColor="#0026ff"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

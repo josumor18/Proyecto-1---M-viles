@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/item_emisora"
+        android:title="Emisora"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/item_play"
+        android:icon="@drawable/play_button_fluxme"
+        android:title="Play"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/item_inicio"
+        android:title="Inicio"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_perfil"
+        android:title="Perfil"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_emisoras"
+        android:title="Emisoras"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_cerrar_sesion"
+        android:title="Cerrar sesión"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Fluxme</string>
+    <string name="strIniciarSesion">Iniciar Sesión</string>
+    <string name="strUsername">Nombre de usuario</string>
+    <string name="strSesionActiva">No cerrar sesión</string>
+
+    <string name="facebook_app_id">2030187973903140</string>
+    <string name="fb_login_protocol_scheme">fb2030187973903140</string>
+    <string name="infoRegistrar">Todavía no tienes una cuenta en Fluxme?</string>
+    <string name="strRegistrateAqui"><![CDATA[<u>Regístrate Aquí</u>]]></string>
+
+</resources>
