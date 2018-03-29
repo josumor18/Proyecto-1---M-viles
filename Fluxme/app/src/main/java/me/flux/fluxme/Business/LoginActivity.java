@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private static String username = "";
     private static String nombre_completo = "";
     private static String foto = "";
+    private static boolean isAdmin = false;
 
     EditText edtUsernameLogin;
     EditText edtPasswordLogin;
@@ -131,6 +133,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 //Verificar si existe el usuario en la base de datos. Si no es asi, se registra con los datos de facebook...
+                ////////OBTENER SI EL USUARIO ES ADMIN O NO Y GUARDARLO EN LA VARIABLE BOOLEANA isAdmin;
 
             }
 
@@ -151,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
         username = edtUsernameLogin.getText().toString();
         String pass = edtPasswordLogin.getText().toString();
         //Validar si las credenciales son correctas
-
+        ////////OBTENER SI EL USUARIO ES ADMIN O NO Y GUARDARLO EN LA VARIABLE BOOLEANA isAdmin;
         //Si son correctas...hacer:
         if(chckSesionActiva.isChecked()){
             guardarUsuarioSesion();
@@ -164,8 +167,10 @@ public class LoginActivity extends AppCompatActivity {
         user.setNombre(nombre_completo);
         user.setUsername(username);
         user.setFoto(foto);
+        user.setAdmin(isAdmin);
 
         Streaming streaming = Streaming.getInstance();
+        streaming.setMediaPlayer(new MediaPlayer());
         streaming.setAudioManager((AudioManager)getSystemService(Context.AUDIO_SERVICE));
         streaming.initMediaPlayer();
         /*streaming.setIdEmisora("0");//LINEA DE PRUEBA. HAY QUE QUITARLA
@@ -199,9 +204,11 @@ public class LoginActivity extends AppCompatActivity {
         Usuario_Singleton user = Usuario_Singleton.getInstance();
         user.setNombre("");
         user.setUsername("");
+        user.setFoto("");
+        user.setAdmin(false);
 
-        Streaming.pause();
-        Streaming.cleanStreaming();
+        //Streaming.pause();
+        //Streaming.cleanStreaming();
 
         LoginManager.getInstance().logOut();
         if(perfil != null){

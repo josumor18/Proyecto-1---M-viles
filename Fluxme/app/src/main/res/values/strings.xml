@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fluxme</string>
+    <string name="app_name">FluxMe</string>
     <string name="strIniciarSesion">Iniciar Sesión</string>
     <string name="strUsername">Nombre de usuario</string>
     <string name="strSesionActiva">No cerrar sesión</string>
@@ -9,4 +9,12 @@
     <string name="infoRegistrar">Todavía no tienes una cuenta en Fluxme?</string>
     <string name="strRegistrateAqui"><![CDATA[<u>Regístrate Aquí</u>]]></string>
 
+    <string name="tabTitPerfilEmisora">Perfil Emisora</string>
+    <string name="tabTitChat">Chat</string>
+    <string name="tabTitVotaciones">Votaciones</string>
+    <string name="tabTitTendencias">Tendencias</string>
+    <string name="tabTitProgramacion">Programación</string>
+    <string name="tabTitPerfil">Perfil</string>
+    <string name="tabTitEstadisticas">Estadísticas</string>
+    <string name="tabTitGPS">GPS</string>
 </resources>
