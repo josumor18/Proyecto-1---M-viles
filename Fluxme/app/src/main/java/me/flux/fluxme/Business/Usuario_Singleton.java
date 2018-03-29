@@ -13,6 +13,7 @@ public class Usuario_Singleton {
     private String nombre;
     private String username;
     private String foto;
+    private boolean admin;
 
     private ArrayList<String> emisorasFavs = new ArrayList<String>();
 
@@ -53,5 +54,13 @@ public class Usuario_Singleton {
 
     public void setEmisorasFavs(ArrayList<String> emisorasFavs) {
         this.emisorasFavs = emisorasFavs;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }

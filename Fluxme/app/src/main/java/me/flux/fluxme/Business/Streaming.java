@@ -99,7 +99,7 @@ public class Streaming {
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
-                    play();
+                    //play();
                 }
             });
             prepared = true;
@@ -146,5 +146,6 @@ public class Streaming {
         setIdEmisora("");
         setEmisora_name("");
         prepared = false;
+        mediaPlayer.release();
     }
 }

@@ -23,7 +23,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="12dp"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@drawable/logo_login_fluxme" />
         </RelativeLayout>
 
         <LinearLayout
@@ -40,8 +40,7 @@
                 android:text="@string/strIniciarSesion"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_light"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/edtUsernameLogin"

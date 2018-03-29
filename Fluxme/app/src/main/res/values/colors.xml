@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ac1a18</color>
     <color name="colorBtnLogin">#468f6d</color>
+    <color name="colorTabLayout">#f3f3f3</color>
+    <color name="colorTabLayoutTextColor">#7d7d7d</color>
 </resources>
