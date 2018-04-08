@@ -10,10 +10,11 @@ import java.util.ArrayList;
 public class Usuario_Singleton {
     private static final Usuario_Singleton ourInstance = new Usuario_Singleton();
 
+    private String id;
     private String nombre;
-    private String username;
+    private String email;
     private String foto;
-    private boolean admin;
+    private String auth_token;
 
     private ArrayList<String> emisorasFavs = new ArrayList<String>();
 
@@ -24,6 +25,14 @@ public class Usuario_Singleton {
     private Usuario_Singleton() {
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -32,12 +41,12 @@ public class Usuario_Singleton {
         this.nombre = nombre;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String username) {
+        this.email= username;
     }
 
     public String getFoto() {
@@ -48,19 +57,19 @@ public class Usuario_Singleton {
         this.foto = foto;
     }
 
+    public String getAuth_token() {
+        return auth_token;
+    }
+
+    public void setAuth_token(String auth_token) {
+        this.auth_token = auth_token;
+    }
+
     public ArrayList<String> getEmisorasFavs() {
         return emisorasFavs;
     }
 
     public void setEmisorasFavs(ArrayList<String> emisorasFavs) {
         this.emisorasFavs = emisorasFavs;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
     }
 }

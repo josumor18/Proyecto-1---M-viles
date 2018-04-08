@@ -17,6 +17,6 @@ public class MainActivity extends BaseActivity {
 
         Usuario_Singleton u = Usuario_Singleton.getInstance();
         TextView t = findViewById(R.id.textView2);
-        t.setText(u.getNombre() + " " + u.getUsername() + "\n" + u.getFoto());
+        t.setText(u.getNombre() + " " + u.getEmail() + "\n" + u.getFoto());
     }
 }

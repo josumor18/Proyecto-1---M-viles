@@ -1,10 +1,13 @@
 package me.flux.fluxme.Business;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,6 +16,8 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,19 +37,27 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+
+import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String USER_PREFERENCES = "user.preferences.fluxme";
-    private static final String PREFERENCE_USERNAME = "string.username.sesion";
+    private static final String PREFERENCE_EMAIL = "string.email.sesion";
+    private static final String PREFERENCE_AUTH_TOKEN = "string.token.sesion";
     private static final String PREFERENCE_SESION_ACTIVA = "boolean.sesion.isActiva";
 
-    private static String username = "";
+    private static String email = "";
     private static String nombre_completo = "";
+    private static String token = "";
     private static String foto = "";
-    private static boolean isAdmin = false;
 
+    RelativeLayout rlLogin, rlLoader;
+    ProgressBar progressBarLogin;
     EditText edtUsernameLogin;
     EditText edtPasswordLogin;
     CheckBox chckSesionActiva;
@@ -59,11 +72,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        rlLogin = findViewById(R.id.rlLogin);
+        rlLoader = findViewById(R.id.rlLoader);
+        progressBarLogin = findViewById(R.id.progressBarLogin);
+
         if(getEstadoSesion()){
-            username = getUsuarioSesion();
+            String[] userData = getUsuarioSesion();
+            email = userData[0];
+            token = userData[1];
             nombre_completo = "Usuario App";//Se obtiene de BD por medio del username
             foto = "Fotoooo";//Se obtiene de BD por medio del username
-            iniciarSesion();
+            ///IR AL ASYNKTASK pero hacer un metodo para iniciar sesion solo con token
         }
 
         txtRegistrar = findViewById(R.id.txtRegistrar);
@@ -114,11 +133,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Application code
                                 try {
-                                    username = object.getString("id");
+                                    email = object.getString("id");///Aqui tengo que agarrar el email.....
                                     nombre_completo = object.getString("name");
                                     foto = Profile.getCurrentProfile().getProfilePictureUri(200,200).toString();
-                                    guardarUsuarioSesion();
-                                    iniciarSesion();
+                                    //guardarUsuarioSesion();
+                                    ////////////////////iniciarSesion();/////////////////////////////////
                                     //String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -133,7 +152,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 //Verificar si existe el usuario en la base de datos. Si no es asi, se registra con los datos de facebook...
-                ////////OBTENER SI EL USUARIO ES ADMIN O NO Y GUARDARLO EN LA VARIABLE BOOLEANA isAdmin;
 
             }
 
@@ -151,32 +169,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginClicked(View view){
-        username = edtUsernameLogin.getText().toString();
+        email = edtUsernameLogin.getText().toString();
         String pass = edtPasswordLogin.getText().toString();
         //Validar si las credenciales son correctas
-        ////////OBTENER SI EL USUARIO ES ADMIN O NO Y GUARDARLO EN LA VARIABLE BOOLEANA isAdmin;
-        //Si son correctas...hacer:
-        if(chckSesionActiva.isChecked()){
-            guardarUsuarioSesion();
-        }
-        iniciarSesion();
+        ExecuteLogin login = new ExecuteLogin(email, pass);
+        login.execute();
     }
 
-    public void iniciarSesion(){
+
+    public void iniciarSesion(JSONObject response){
         Usuario_Singleton user = Usuario_Singleton.getInstance();
-        user.setNombre(nombre_completo);
-        user.setUsername(username);
-        user.setFoto(foto);
-        user.setAdmin(isAdmin);
+
+        try {
+            response = response.getJSONObject("data");
+            user.setId(response.getString("id"));
+            user.setNombre(response.getString("name"));
+            user.setEmail(response.getString("email"));
+            user.setFoto(foto);
+            user.setAuth_token(response.getString("authentication_token"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Si son correctas...hacer:
+        if(chckSesionActiva.isChecked()){
+            guardarUsuarioSesion(user.getEmail(), user.getAuth_token());
+        }
 
         Streaming streaming = Streaming.getInstance();
         streaming.setMediaPlayer(new MediaPlayer());
         streaming.setAudioManager((AudioManager)getSystemService(Context.AUDIO_SERVICE));
         streaming.initMediaPlayer();
-        /*streaming.setIdEmisora("0");//LINEA DE PRUEBA. HAY QUE QUITARLA
-        streaming.setEmisora_name("RadioPrueba");//LINEA DE PRUEBA. HAY QUE QUITARLA
-        streaming.setStream("http://s41.myradiostream.com:35530/");//LINEA DE PRUEBA. HAY QUE QUITARLA
-        */
 
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
@@ -193,19 +216,21 @@ public class LoginActivity extends AppCompatActivity {
     //------------------------------------------------------------------------------------------------------//
     //----------------------------- Obtiene/Guarda las preferencias de sesion ------------------------------//
     //------------------------------------------------------------------------------------------------------//
-    public void guardarUsuarioSesion(){
+    public void guardarUsuarioSesion(String correo, String auth_token){
         SharedPreferences preferences = getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
-        preferences.edit().putString(PREFERENCE_USERNAME, username).apply();
+        preferences.edit().putString(PREFERENCE_EMAIL, correo);
+        preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token);
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, chckSesionActiva.isChecked()).apply();
     }
 
     public static void cerrarSesion(Context c){
         Usuario_Singleton user = Usuario_Singleton.getInstance();
+        user.setId("");
         user.setNombre("");
-        user.setUsername("");
+        user.setEmail("");
         user.setFoto("");
-        user.setAdmin(false);
+        user.setAuth_token("");
 
         //Streaming.pause();
         //Streaming.cleanStreaming();
@@ -215,18 +240,22 @@ public class LoginActivity extends AppCompatActivity {
             perfil.stopTracking();
             perfil = null;
         }
-        username = "";
+        email = "";
 
         SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
-        preferences.edit().putString(PREFERENCE_USERNAME, username).apply();
+        preferences.edit().putString(PREFERENCE_EMAIL, email).apply();
+        preferences.edit().putString(PREFERENCE_AUTH_TOKEN, "").apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, false).apply();
     }
 
-    public String getUsuarioSesion(){
+    public String[] getUsuarioSesion(){
+        String[] userData = new String[2];
         SharedPreferences preferences = getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se obtiene son todos los datos del usuario o que (segun lo que se haya guardado)...
-        return preferences.getString(PREFERENCE_USERNAME, "");
+        userData[0] = preferences.getString(PREFERENCE_EMAIL, "");
+        userData[1] = preferences.getString(PREFERENCE_AUTH_TOKEN, "");
+        return userData;
     }
 
     public boolean getEstadoSesion(){
@@ -241,5 +270,46 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //------------------------------------------------------------------------------------------------------//
+    public class ExecuteLogin extends AsyncTask<String, Void, String>{
+        private String email;
+        private String password;
+        private boolean isLogged = false;
+
+        public ExecuteLogin(String email, String password){
+            this.email = email;
+            this.password = password;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            rlLoader.setVisibility(View.VISIBLE);
+            rlLogin.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            isLogged = api.login(email, password);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isLogged){
+                iniciarSesion(API_Access.getInstance().getResponse());
+            }else{
+                Toast.makeText(LoginActivity.this, "Login ha fallado", Toast.LENGTH_SHORT).show();
+                rlLoader.setVisibility(View.INVISIBLE);
+                rlLogin.setVisibility(View.VISIBLE);
+            }
+        }
     }
 }
