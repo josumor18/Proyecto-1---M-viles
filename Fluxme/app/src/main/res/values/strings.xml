@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FluxMe</string>
     <string name="strIniciarSesion">Iniciar Sesión</string>
-    <string name="strUsername">Nombre de usuario</string>
+    <string name="strEmail">Correo electrónico</string>
     <string name="strSesionActiva">No cerrar sesión</string>
 
     <string name="facebook_app_id">2030187973903140</string>

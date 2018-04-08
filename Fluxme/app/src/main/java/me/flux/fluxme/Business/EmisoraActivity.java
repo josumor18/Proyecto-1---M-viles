@@ -74,34 +74,34 @@ public class EmisoraActivity extends BaseActivity {
     }
 
     private void cargarTabLayout(){
-        boolean admin = Usuario_Singleton.getInstance().isAdmin();
+        //boolean admin = Usuario_Singleton.getInstance().isAdmin();
         for(int i = 0; i < 5; i++){
-            if(admin){
+            //if(admin){
 
-            }else{
+            //}else{
                 tabLayout.addTab(tabLayout.newTab().setText(tabTextUser[i]));
                 if(i == 0){
                     tabLayout.getTabAt(0).setIcon(tabIconsUser_Sel[0]);
                 }else{
                     tabLayout.getTabAt(i).setIcon(tabIconsUser_Des[i]);
                 }
-            }
+            //}
         }
     }
 
     private void cambiarIconoSeleccionado(int pos){
-        if(Usuario_Singleton.getInstance().isAdmin()){
+        //if(Usuario_Singleton.getInstance().isAdmin()){
             //tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Sel[pos]);
-        }else{
+        //}else{
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Sel[pos]);
-        }
+        //}
     }
 
     private void cambiarIconoDeseleccionado(int pos) {
-        if (Usuario_Singleton.getInstance().isAdmin()) {
+        //if (Usuario_Singleton.getInstance().isAdmin()) {
             //tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Des[pos]);
-        } else {
+        //} else {
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Des[pos]);
-        }
+        //}
     }
 }
