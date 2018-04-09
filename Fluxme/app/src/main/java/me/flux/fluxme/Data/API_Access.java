@@ -49,10 +49,24 @@ public class API_Access {
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("email", email);
         Parametros.put("encrypted_password", password);
-        //DownloadTask downloadTask = new DownloadTask("POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
-        //estadoRequest = -1;
-        //downloadTask.execute("users/login");
-        return makeRequest("users/login", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+        return makeRequest("users/login", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean login_token(String email, String auth_token){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("email", email);
+        Parametros.put("authentication_token", auth_token);
+        return makeRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean login_facebook(String name, String email, String auth_token){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("name", name);
+        Parametros.put("email", email);
+        Parametros.put("authentication_token", auth_token);
+        return makeRequest("users/login_facebook", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
     public JSONObject getResponse(){
