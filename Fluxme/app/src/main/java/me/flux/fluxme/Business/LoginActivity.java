@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -83,6 +84,16 @@ public class LoginActivity extends AppCompatActivity {
             nombre_completo = "Usuario App";//Se obtiene de BD por medio del username
             foto = "Fotoooo";//Se obtiene de BD por medio del username
             ///IR AL ASYNKTASK pero hacer un metodo para iniciar sesion solo con token
+            ExecuteLogin login = new ExecuteLogin(email, token);
+            login.setAuth_Token(email, token);
+            login.execute();
+        }else{
+            LoginManager.getInstance().logOut();
+
+            SharedPreferences preferences = this.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
+            preferences.edit().putString(PREFERENCE_EMAIL, "").apply();
+            preferences.edit().putString(PREFERENCE_AUTH_TOKEN, "").apply();
+            preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, false).apply();
         }
 
         txtRegistrar = findViewById(R.id.txtRegistrar);
@@ -109,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
-            public void onSuccess(LoginResult loginResult) {
+            public void onSuccess(final LoginResult loginResult) {
                 // App code
                 perfil = new ProfileTracker() {
                     @Override
@@ -124,6 +135,8 @@ public class LoginActivity extends AppCompatActivity {
                 };
                 perfil.startTracking();
 
+                token = loginResult.getAccessToken().getToken();
+
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
                         new GraphRequest.GraphJSONObjectCallback() {
@@ -133,11 +146,14 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // Application code
                                 try {
-                                    email = object.getString("id");///Aqui tengo que agarrar el email.....
+                                    email = object.getString("email");
                                     nombre_completo = object.getString("name");
                                     foto = Profile.getCurrentProfile().getProfilePictureUri(200,200).toString();
                                     //guardarUsuarioSesion();
-                                    ////////////////////iniciarSesion();/////////////////////////////////
+                                    token = loginResult.getAccessToken().getToken();
+                                    ExecuteLogin login = new ExecuteLogin(nombre_completo, email, token);
+                                    login.execute();
+                                    ///////iniciarSesion();
                                     //String birthday = object.getString("birthday"); // 01/31/1980 format
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -219,12 +235,13 @@ public class LoginActivity extends AppCompatActivity {
     public void guardarUsuarioSesion(String correo, String auth_token){
         SharedPreferences preferences = getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
-        preferences.edit().putString(PREFERENCE_EMAIL, correo);
-        preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token);
+        preferences.edit().putString(PREFERENCE_EMAIL, correo).apply();
+        preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, chckSesionActiva.isChecked()).apply();
     }
 
     public static void cerrarSesion(Context c){
+        foto = "";
         Usuario_Singleton user = Usuario_Singleton.getInstance();
         user.setId("");
         user.setNombre("");
@@ -243,7 +260,7 @@ public class LoginActivity extends AppCompatActivity {
         email = "";
 
         SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
-        //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
+
         preferences.edit().putString(PREFERENCE_EMAIL, email).apply();
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, "").apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, false).apply();
@@ -274,13 +291,34 @@ public class LoginActivity extends AppCompatActivity {
 
     //------------------------------------------------------------------------------------------------------//
     public class ExecuteLogin extends AsyncTask<String, Void, String>{
+        private String name;
         private String email;
         private String password;
+        private String auth_token;
+        int tipoAutenticacion = 0;// 0-Formulario, 1-Facebook, 2-Authentication Token(sesion abierta)
         private boolean isLogged = false;
 
+        //Login con los campos de email y contraseña
         public ExecuteLogin(String email, String password){
             this.email = email;
             this.password = password;
+            tipoAutenticacion = 0;
+        }
+
+        //Login con facebook
+        public ExecuteLogin(String name, String email, String auth_token){
+            this.name = name;
+            this.email = email;
+            this.password = "";
+            this.auth_token = auth_token.substring(0, 10);
+            tipoAutenticacion = 1;
+        }
+
+        //set Authentication Token
+        public void setAuth_Token(String email, String auth_token){
+            this.email = email;
+            this.auth_token = auth_token;
+            tipoAutenticacion = 2;
         }
 
         @Override
@@ -294,7 +332,17 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             API_Access api = API_Access.getInstance();
-            isLogged = api.login(email, password);
+            if(tipoAutenticacion == 2){
+                //login con sesion ya abierta de antes
+                isLogged = api.login_token(email, auth_token);
+            }else if(tipoAutenticacion == 1){
+                //login con facebook
+                isLogged = api.login_facebook(name, email, auth_token);
+            }else if (tipoAutenticacion == 0){
+                //login con los campos del formulario (email, password)
+                isLogged = api.login(email, password);
+            }
+
 
             return null;
         }
@@ -306,7 +354,13 @@ public class LoginActivity extends AppCompatActivity {
             if(isLogged){
                 iniciarSesion(API_Access.getInstance().getResponse());
             }else{
-                Toast.makeText(LoginActivity.this, "Login ha fallado", Toast.LENGTH_SHORT).show();
+                String mensaje = "Error";
+                try {
+                    mensaje = (API_Access.getInstance().getResponse()).getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(LoginActivity.this, mensaje, Toast.LENGTH_SHORT).show();
                 rlLoader.setVisibility(View.INVISIBLE);
                 rlLogin.setVisibility(View.VISIBLE);
             }
