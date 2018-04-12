@@ -103,9 +103,10 @@ public class BaseActivity extends AppCompatActivity {
                     if(Streaming.isIsPlaying()){
                         main_menu.getItem(1).setIcon(R.drawable.stop_button_fluxme);//LINEA DE PRUEBA. HAY QUE QUITARLA
                     }
-
-                    main_menu.getItem(0).setEnabled(true);
                 }
+
+
+                main_menu.getItem(0).setEnabled(true);
                 return true;
             case R.id.item_cerrar_sesion:
                 Streaming.pause();
