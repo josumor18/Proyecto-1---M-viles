@@ -27,6 +27,20 @@ public class EmisoraActivity extends BaseActivity {
             R.drawable.tab_tendencias_sel,
             R.drawable.tab_programacion_sel
     };
+    private int[] tabIconsAdmin_Des = {
+            R.drawable.tab_perfil_emisora_des,
+            R.drawable.tab_chat_des,
+            R.drawable.tab_estadisticas_des,
+            R.drawable.tab_gps_des,
+            R.drawable.tab_programacion_des
+    };
+    private int[] tabIconsAdmin_Sel = {
+            R.drawable.tab_perfil_emisora_sel,
+            R.drawable.tab_chat_sel,
+            R.drawable.tab_estadisticas_sel,
+            R.drawable.tab_gps_sel,
+            R.drawable.tab_programacion_sel
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,34 +88,39 @@ public class EmisoraActivity extends BaseActivity {
     }
 
     private void cargarTabLayout(){
-        //boolean admin = Usuario_Singleton.getInstance().isAdmin();
+        boolean admin = Usuario_Singleton.getInstance().isAdmin();
         for(int i = 0; i < 5; i++){
-            //if(admin){
-
-            //}else{
+            if(admin){
+                tabLayout.addTab(tabLayout.newTab().setText(tabTextAdmin[i]));
+                if(i == 0){
+                    tabLayout.getTabAt(0).setIcon(tabIconsAdmin_Sel[0]);
+                }else{
+                    tabLayout.getTabAt(i).setIcon(tabIconsAdmin_Des[i]);
+                }
+            }else{
                 tabLayout.addTab(tabLayout.newTab().setText(tabTextUser[i]));
                 if(i == 0){
                     tabLayout.getTabAt(0).setIcon(tabIconsUser_Sel[0]);
                 }else{
                     tabLayout.getTabAt(i).setIcon(tabIconsUser_Des[i]);
                 }
-            //}
+            }
         }
     }
 
     private void cambiarIconoSeleccionado(int pos){
-        //if(Usuario_Singleton.getInstance().isAdmin()){
-            //tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Sel[pos]);
-        //}else{
+        if(Usuario_Singleton.getInstance().isAdmin()){
+            tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Sel[pos]);
+        }else{
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Sel[pos]);
-        //}
+        }
     }
 
     private void cambiarIconoDeseleccionado(int pos) {
-        //if (Usuario_Singleton.getInstance().isAdmin()) {
-            //tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Des[pos]);
-        //} else {
+        if (Usuario_Singleton.getInstance().isAdmin()) {
+            tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Des[pos]);
+        } else {
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Des[pos]);
-        //}
+        }
     }
 }
