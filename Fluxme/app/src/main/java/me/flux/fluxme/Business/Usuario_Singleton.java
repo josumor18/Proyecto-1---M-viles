@@ -15,7 +15,7 @@ public class Usuario_Singleton {
     private String email;
     private String foto;
     private String auth_token;
-    private boolean admin = true;
+    private boolean admin = false;//MODIFICAR ESTE MAE SEGUN SI EL USUARIO ES ADMIN DE LA EMISORA CONSULTADA
 
     private ArrayList<String> emisorasFavs = new ArrayList<String>();
 

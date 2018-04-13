@@ -67,13 +67,16 @@ public class BaseActivity extends AppCompatActivity {
                     Streaming.pause();
                 }else{
                     if(Streaming.isPrepared()){
-                        Streaming.setStream(Streaming.getStream());
+                        //Streaming.setStream(Streaming.getStream());
                         Streaming.play();
                         if(Streaming.isIsPlaying()){
                             item.setIcon(R.drawable.stop_button_fluxme);
                         }
                     }else{
-                        //ir a activity de emisoras favoritas
+                        if(!(this instanceof ListaEmisorasActivity)) {
+                            Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
+                            startActivity(intentEmisoras);
+                        }
                     }
                 }
                 return true;
@@ -83,28 +86,8 @@ public class BaseActivity extends AppCompatActivity {
 
                 return true;
             case R.id.item_emisoras:
-                //Streaming.cleanStreaming();//LINEA DE PRUEBA. HAY QUE QUITARLA
-                Streaming.setIdEmisora("0");//LINEA DE PRUEBA. HAY QUE QUITARLA
-                Streaming.setEmisora_name("Nombre Radio");//LINEA DE PRUEBA. HAY QUE QUITARLA
-                Streaming.setStream("http://s41.myradiostream.com:35530/");//LINEA DE PRUEBA. HAY QUE QUITARLA
-                main_menu.getItem(0).setTitle(Streaming.getEmisora_name());//LINEA DE PRUEBA. HAY QUE QUITARLA
-                main_menu.getItem(0).setEnabled(true);//LINEA DE PRUEBA. HAY QUE QUITARLA
-                //ESTE if SI DEFINITIVAMENTE NI EN LA PARTE DE EMISORAS VA
-                //SOLO LO PUSE PARA QUE BLOQUEE EL ITEM SI LA PANTALLA ACTUAL ES EL PERFIL DE LA EMISORA
-                if(this instanceof EmisoraActivity){
-                    main_menu.getItem(0).setEnabled(false);
-                }else{
-                    main_menu.getItem(0).setEnabled(true);
-                }
-                ////////////////////////////////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////////////////////////////////
-                if(Streaming.isPrepared()){
-                    Streaming.play();//LINEA DE PRUEBA. HAY QUE QUITARLA
-                    if(Streaming.isIsPlaying()){
-                        main_menu.getItem(1).setIcon(R.drawable.stop_button_fluxme);//LINEA DE PRUEBA. HAY QUE QUITARLA
-                    }
-                }
-
+                Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
+                startActivity(intentEmisoras);
 
                 main_menu.getItem(0).setEnabled(true);
                 return true;
