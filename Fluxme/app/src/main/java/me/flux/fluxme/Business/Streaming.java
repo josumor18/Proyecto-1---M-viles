@@ -86,22 +86,15 @@ public class Streaming {
         Streaming.stream = stream;
         pause();
         try{
-
-            //mediaPlayer = new MediaPlayer();
-            //initMediaPlayer();
-            /*if(isPlaying){
-                isPlaying = false;
-                mediaPlayer.pause();
-                mediaPlayer.stop();
-            }*/
             mediaPlayer.setDataSource(stream);
+            prepared = false;
             mediaPlayer.prepare();
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            /*mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     //play();
                 }
-            });
+            });*/
             prepared = true;
         }catch (IOException e){
             e.printStackTrace();

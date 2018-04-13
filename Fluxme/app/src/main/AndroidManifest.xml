@@ -40,7 +40,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Business.MainActivity" />
-        <activity android:name=".Business.EmisoraActivity"></activity>
+        <activity android:name=".Business.EmisoraActivity" />
+        <activity android:name=".Business.ListaEmisorasActivity"></activity>
     </application>
 
 </manifest>
