@@ -1,27 +1,23 @@
 package me.flux.fluxme.Business;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -37,10 +33,6 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
 
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
@@ -224,9 +216,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signinClicked(View view){
         //Aqui llama a la activity de registrar
-        /*Intent intent = new Intent(getApplicationContext(), SigninActivity.class);
-        startActivity(intent);*/
-        Toast.makeText(this, "Llamar a la activity Signin", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), RegistrarActivity.class);
+        startActivity(intent);
+        finish();
+        //Toast.makeText(this, "Llamar a la activity Signin", Toast.LENGTH_SHORT).show();
     }
 
     //------------------------------------------------------------------------------------------------------//
@@ -352,11 +345,11 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if(isLogged){
-                iniciarSesion(API_Access.getInstance().getJsonObjectResponseResponse());
+                iniciarSesion(API_Access.getInstance().getJsonObjectResponse());
             }else{
                 String mensaje = "Error";
                 try {
-                    mensaje = (API_Access.getInstance().getJsonObjectResponseResponse()).getString("message");
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
