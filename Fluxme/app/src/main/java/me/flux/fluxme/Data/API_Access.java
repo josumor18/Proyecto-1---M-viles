@@ -47,6 +47,16 @@ public class API_Access {
     private API_Access() {
     }
 
+    public boolean register(String username, String email, String password){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("username", username);
+        Parametros.put("email", email);
+        Parametros.put("password", password);
+        Parametros.put("password_confirmation",password);
+        return makePOSTRequest("users/register", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
     public boolean login(String email, String password){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();

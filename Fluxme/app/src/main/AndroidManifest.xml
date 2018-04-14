@@ -41,7 +41,8 @@
         </activity>
         <activity android:name=".Business.MainActivity" />
         <activity android:name=".Business.EmisoraActivity" />
-        <activity android:name=".Business.ListaEmisorasActivity"></activity>
+        <activity android:name=".Business.ListaEmisorasActivity" />
+        <activity android:name=".Business.RegistrarActivity"></activity>
     </application>
 
 </manifest>
