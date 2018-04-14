@@ -44,9 +44,6 @@ public class ListaEmisorasActivity extends BaseActivity {
                 setEmisoraToStreaming(position);
             }
         });
-
-
-
     }
 
     private void setEmisoraToStreaming(int position) {
@@ -73,8 +70,11 @@ public class ListaEmisorasActivity extends BaseActivity {
         }
     }
 
-    private void cargarEmisoras(JSONArray jsonEmisoras){
+    private void cargarEmisoras(JSONObject jsonResult){
+
         try {
+            Usuario_Singleton.getInstance().setAuth_token(jsonResult.getString("authentication_token"));
+            JSONArray jsonEmisoras = jsonResult.getJSONArray("emisoras");
             for(int i = 0; i < jsonEmisoras.length(); i++) {
                 JSONObject emisora = (JSONObject) jsonEmisoras.get(i);
                 emisoras.add(new Emisora(emisora.getInt("id"), emisora.getString("nombre"), emisora.getString("link"), emisora.getInt("id_admin")));
@@ -148,8 +148,8 @@ public class ListaEmisorasActivity extends BaseActivity {
         @Override
         protected String doInBackground(String... strings) {
             API_Access api = API_Access.getInstance();
-            isOk = api.getEmisoras();
-
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            isOk = api.getEmisoras(user.getId(), user.getAuth_token());
 
             return null;
         }
@@ -159,7 +159,7 @@ public class ListaEmisorasActivity extends BaseActivity {
             super.onPostExecute(s);
 
             if(isOk){
-                cargarEmisoras(API_Access.getInstance().getJsonArrayResponse());
+                cargarEmisoras(API_Access.getInstance().getJsonObjectResponse());
             }else{
                 String mensaje = "Error getEmisoras()";
 
