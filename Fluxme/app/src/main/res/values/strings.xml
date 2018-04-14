@@ -17,4 +17,5 @@
     <string name="tabTitPerfil">Perfil</string>
     <string name="tabTitEstadisticas">Estadísticas</string>
     <string name="tabTitGPS">GPS</string>
+    <string name="strEmisorasDisponibles">Emisoras Disponibles</string>
 </resources>

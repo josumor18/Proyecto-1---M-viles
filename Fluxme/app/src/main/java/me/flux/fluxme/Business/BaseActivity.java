@@ -73,7 +73,7 @@ public class BaseActivity extends AppCompatActivity {
                             item.setIcon(R.drawable.stop_button_fluxme);
                         }
                     }else{
-                        if(!(this instanceof ListaEmisorasActivity)) {
+                        if(!(this instanceof ListaEmisorasActivity) && Streaming.getStream().isEmpty()) {
                             Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
                             startActivity(intentEmisoras);
                         }
