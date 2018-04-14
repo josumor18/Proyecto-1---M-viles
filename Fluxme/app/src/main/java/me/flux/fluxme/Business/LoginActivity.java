@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
         //Aqui llama a la activity de registrar
         Intent intent = new Intent(getApplicationContext(), RegistrarActivity.class);
         startActivity(intent);
-        finish();
+
         //Toast.makeText(this, "Llamar a la activity Signin", Toast.LENGTH_SHORT).show();
     }
 

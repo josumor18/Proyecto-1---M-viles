@@ -76,7 +76,7 @@
                 android:layout_margin="10dp"
                 android:background="@android:color/background_light"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="Password (min.6 caracteres)"
                 android:inputType="textPassword"
                 android:singleLine="true" />
 
