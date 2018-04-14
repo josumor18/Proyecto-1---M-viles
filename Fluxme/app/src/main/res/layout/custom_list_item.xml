@@ -28,7 +28,7 @@
             android:paddingLeft="20dp"
             android:text="Nombre Emisora"
             android:textAlignment="textStart"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
     </RelativeLayout>

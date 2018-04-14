@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +27,13 @@ public class ListaEmisorasActivity extends BaseActivity {
 
     private ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
     ListView lvEmisoras;
+    RelativeLayout rlLoaderEmisoras;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_emisoras);
+
+        rlLoaderEmisoras = findViewById(R.id.rlLoaderEmisoras);
 
         ExecuteGetEmisoras getEmisoras = new ExecuteGetEmisoras();
         getEmisoras.execute();
@@ -47,6 +51,7 @@ public class ListaEmisorasActivity extends BaseActivity {
     }
 
     private void setEmisoraToStreaming(int position) {
+        rlLoaderEmisoras.setVisibility(View.VISIBLE);
         Emisora seleccionada = emisoras.get(position);
         Streaming.pause();
         main_menu.getItem(1).setIcon(R.drawable.play_button_fluxme);
@@ -68,12 +73,15 @@ public class ListaEmisorasActivity extends BaseActivity {
                 main_menu.getItem(1).setIcon(R.drawable.stop_button_fluxme);
             }
         }
+        rlLoaderEmisoras.setVisibility(View.INVISIBLE);
     }
 
     private void cargarEmisoras(JSONObject jsonResult){
 
         try {
-            Usuario_Singleton.getInstance().setAuth_token(jsonResult.getString("authentication_token"));
+            String token = jsonResult.getString("authentication_token");
+            Usuario_Singleton.getInstance().setAuth_token(token);
+            LoginActivity.actualizarAuth_Token(token, getApplicationContext());
             JSONArray jsonEmisoras = jsonResult.getJSONArray("emisoras");
             for(int i = 0; i < jsonEmisoras.length(); i++) {
                 JSONObject emisora = (JSONObject) jsonEmisoras.get(i);
@@ -141,8 +149,8 @@ public class ListaEmisorasActivity extends BaseActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            /*rlLoader.setVisibility(View.VISIBLE);
-            rlLogin.setVisibility(View.INVISIBLE);*/
+            rlLoaderEmisoras.setVisibility(View.VISIBLE);
+            //rlLogin.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -167,6 +175,7 @@ public class ListaEmisorasActivity extends BaseActivity {
                 //rlLoader.setVisibility(View.INVISIBLE);
                 //rlLogin.setVisibility(View.VISIBLE);
             }
+            rlLoaderEmisoras.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
         //Aqui llama a la activity de registrar
         Intent intent = new Intent(getApplicationContext(), RegistrarActivity.class);
         startActivity(intent);
-        finish();
+        //finish();
         //Toast.makeText(this, "Llamar a la activity Signin", Toast.LENGTH_SHORT).show();
     }
 
@@ -231,6 +231,12 @@ public class LoginActivity extends AppCompatActivity {
         preferences.edit().putString(PREFERENCE_EMAIL, correo).apply();
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, chckSesionActiva.isChecked()).apply();
+    }
+
+    public static void actualizarAuth_Token(String auth_token, Context c){
+        SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
+
+        preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
     }
 
     public static void cerrarSesion(Context c){
