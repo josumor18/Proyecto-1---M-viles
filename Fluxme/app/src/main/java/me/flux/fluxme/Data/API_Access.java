@@ -33,7 +33,7 @@ import javax.net.ssl.HttpsURLConnection;
  */
 
 public class API_Access {
-    private final String url_base = "https://fluxme-app.herokuapp.com/";
+    private final String url_base = "https://fluxme-app.herokuapp.com/api/v1/";
     int estadoRequest = -1;
     private JSONObject jsonObjectResponse = new JSONObject();
     private JSONArray jsonArrayResponse = new JSONArray();
@@ -52,7 +52,7 @@ public class API_Access {
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("email", email);
         Parametros.put("encrypted_password", password);
-        return makePOSTRequest("api/v1/users/login", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+        return makePOSTRequest("users/login", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
     public boolean login_token(String email, String auth_token){
@@ -60,7 +60,7 @@ public class API_Access {
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("email", email);
         Parametros.put("authentication_token", auth_token);
-        return makePOSTRequest("api/v1/users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+        return makePOSTRequest("users/login_token", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
     public boolean login_facebook(String name, String email, String auth_token){
@@ -69,16 +69,16 @@ public class API_Access {
         Parametros.put("name", name);
         Parametros.put("email", email);
         Parametros.put("authentication_token", auth_token);
-        return makePOSTRequest("api/v1/users/login_facebook", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+        return makePOSTRequest("users/login_facebook", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
-    public boolean getEmisoras(){
+    public boolean getEmisoras(String id, String auth_token){
         jsonArrayResponse = new JSONArray();
-        HashMap<String, String> Parametros = new HashMap<String, String>();
-        return makeGETRequest("emisoras.json", "GET", false, true, Parametros, HttpsURLConnection.HTTP_OK);
+        String urlEsp = "emisoras/index?id=" + id + "&authentication_token=" + auth_token;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
-    public JSONObject getJsonObjectResponseResponse(){
+    public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
         return jsonObjectResponse;
     }
@@ -173,7 +173,7 @@ public class API_Access {
     }
 
 
-    private boolean makeGETRequest(String urlEsp, String metodo, boolean doInput, boolean doOutput, HashMap<String, String> Parametros, int responseCode) {
+    private boolean makeGETRequest(String urlEsp, String metodo, int responseCode) {
         String result = "";
         URL url;
         HttpsURLConnection httpsURLConnection;
@@ -215,7 +215,7 @@ public class API_Access {
             reader.close();
             streamReader.close();
 
-            jsonArrayResponse = new JSONArray(result);
+            jsonObjectResponse = new JSONObject(result);
             return true;
         } catch (IOException e) {
             e.printStackTrace();

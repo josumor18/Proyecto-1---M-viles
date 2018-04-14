@@ -352,11 +352,11 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if(isLogged){
-                iniciarSesion(API_Access.getInstance().getJsonObjectResponseResponse());
+                iniciarSesion(API_Access.getInstance().getJsonObjectResponse());
             }else{
                 String mensaje = "Error";
                 try {
-                    mensaje = (API_Access.getInstance().getJsonObjectResponseResponse()).getString("message");
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
