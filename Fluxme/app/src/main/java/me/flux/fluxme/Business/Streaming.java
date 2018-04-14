@@ -16,7 +16,7 @@ public class Streaming {
     private static boolean isPlaying = false;
     private static boolean prepared = false;
     private static String idEmisora = "";
-    private static String stream = "http://s41.myradiostream.com:35530/";
+    private static String stream = "";
     private static String emisora_name = "";
     private static AudioManager audioManager;
     private static MediaPlayer mediaPlayer = new MediaPlayer();
