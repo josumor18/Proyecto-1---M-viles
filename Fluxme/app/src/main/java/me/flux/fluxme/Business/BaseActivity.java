@@ -83,7 +83,10 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.item_inicio:
                 return true;
             case R.id.item_perfil:
+                Intent intentPerfil = new Intent(getApplicationContext(), PerfilActivity.class);
+                startActivity(intentPerfil);
 
+                main_menu.getItem(0).setEnabled(true);
                 return true;
             case R.id.item_emisoras:
                 Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
