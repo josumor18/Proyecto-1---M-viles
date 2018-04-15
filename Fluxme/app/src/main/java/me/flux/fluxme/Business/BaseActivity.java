@@ -1,6 +1,7 @@
 package me.flux.fluxme.Business;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.stream.Stream;
 
+import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
 
 /**
@@ -25,11 +27,20 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Streaming s = Streaming.getInstance();
-        //s.initMediaPlayer();
-        ///s.setStream("http://s41.myradiostream.com:35530/");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /*try{
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            ExecuteDeleteLocations loc = new ExecuteDeleteLocations(user.getId(), user.getAuth_token());
+            loc.execute();
+        }catch (Exception e){
+            e.printStackTrace();
+        }*/
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,6 +109,10 @@ public class BaseActivity extends AppCompatActivity {
                 Streaming.pause();
                 Streaming.cleanStreaming();
 
+                Usuario_Singleton user = Usuario_Singleton.getInstance();
+                ExecuteDeleteLocations loc = new ExecuteDeleteLocations(user.getId(), user.getAuth_token());
+                loc.execute();
+
                 LoginActivity.cerrarSesion(getApplicationContext());
                 Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLogin);
@@ -113,6 +128,36 @@ public class BaseActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        //toolbar.setSubtitle("welcome");
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteDeleteLocations extends AsyncTask<String, Void, String> {
+        String id;
+        String auth_token;
+
+        public ExecuteDeleteLocations(String id, String auth_token) {
+            this.id = id;
+            this. auth_token = auth_token;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+
+            api.deleteLocations(id, auth_token);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
     }
 }

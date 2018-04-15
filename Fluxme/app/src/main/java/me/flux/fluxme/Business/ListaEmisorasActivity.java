@@ -1,8 +1,15 @@
 package me.flux.fluxme.Business;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +20,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +36,14 @@ import me.flux.fluxme.R;
 
 public class ListaEmisorasActivity extends BaseActivity {
 
+    private Double longitud;
+    private Double latitud;
     private ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
     ListView lvEmisoras;
     RelativeLayout rlLoaderEmisoras;
+    LocationManager locationManager;
+    LocationListener locationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +56,29 @@ public class ListaEmisorasActivity extends BaseActivity {
 
         initToolbar();
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
+
         lvEmisoras = findViewById(R.id.listaEmisoras);
-        //lvEmisoras.setAdapter(new EmisorasAdapter());
         lvEmisoras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,6 +99,11 @@ public class ListaEmisorasActivity extends BaseActivity {
         boolean admin = false;
         if(seleccionada.getId_admin() == Integer.parseInt(Usuario_Singleton.getInstance().getId())){
             admin = true;
+        }else{
+            obtenerUbicacion();
+
+            ExecuteAddLocations loc = new ExecuteAddLocations();
+            loc.execute();
         }
         Usuario_Singleton.getInstance().setAdmin(admin);
 
@@ -74,6 +116,22 @@ public class ListaEmisorasActivity extends BaseActivity {
             }
         }
         rlLoaderEmisoras.setVisibility(View.INVISIBLE);
+    }
+
+    private void obtenerUbicacion(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
+        }
+        else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+            longitud = lastLocation.getLongitude();
+            latitud = lastLocation.getLatitude();
+
+        }
     }
 
     private void cargarEmisoras(JSONObject jsonResult){
@@ -176,6 +234,31 @@ public class ListaEmisorasActivity extends BaseActivity {
                 //rlLogin.setVisibility(View.VISIBLE);
             }
             rlLoaderEmisoras.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteAddLocations extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.addLocation(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), Double.toString(longitud), Double.toString(latitud));
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 }

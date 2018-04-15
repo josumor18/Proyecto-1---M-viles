@@ -1,10 +1,6 @@
 package me.flux.fluxme.Data;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,16 +9,13 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -88,6 +81,33 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean addLocation(String id_user, String auth_token, String id_emisora, String longitud, String latitud){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_user", id_user);
+        Parametros.put("authentication_token", auth_token);
+        Parametros.put("id_emisora", id_emisora);
+        Parametros.put("longitud", longitud);
+        Parametros.put("latitud", latitud);
+        return makePOSTRequest("ubicaciones/add", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getLocations(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "ubicaciones/get?id=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean deleteLocations(String id, String auth_token){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "ubicaciones/del_ubicacion?id_user=" + id + "&authentication_token=" + auth_token;
+        return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
+        /*HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("authentication_token", auth_token);
+        return makePOSTRequest("ubicaciones/del_ubicacion", "DELETE", true, true, Parametros, HttpsURLConnection.HTTP_OK);*/
+    }
+
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
         return jsonObjectResponse;
@@ -99,6 +119,27 @@ public class API_Access {
     }
 
 
+    private boolean makeDELETERequest(String urlEsp, String metodo, int responseCode){
+        URL url;
+        HttpsURLConnection httpsURLConnection;
+
+        try {
+            url = new URL(url_base + urlEsp);
+            httpsURLConnection = (HttpsURLConnection) url.openConnection();
+            httpsURLConnection.setRequestMethod("DELETE");
+            httpsURLConnection.setDoOutput(false);
+            httpsURLConnection.setDoInput(true);
+            httpsURLConnection.connect();
+            int r = httpsURLConnection.getResponseCode();
+            String rC = Integer.toString(httpsURLConnection.getResponseCode());
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return false;
+    }
+
+    /////////////////////////////////////////////// Métodos que ejecutan las solicitudes ////////////////////////////////////////////
     private boolean makePOSTRequest(String urlEsp, String metodo, boolean doInput, boolean doOutput, HashMap<String, String> Parametros, int responseCode){
         String result = "";
         URL url;
@@ -210,13 +251,13 @@ public class API_Access {
 
             //Check if the line we are reading is not null
             int rCode = httpsURLConnection.getResponseCode();
-            if(responseCode == rCode) {
+            if (responseCode == rCode) {
                 String inputLine = "";
                 while ((inputLine = reader.readLine()) != null) {
                     stringBuilder.append(inputLine);
                 }
                 result = stringBuilder.toString();
-            }else {
+            } else {
                 result = "Error " + responseCode;
             }
 
