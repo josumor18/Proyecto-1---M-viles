@@ -10,7 +10,7 @@ import me.flux.fluxme.R;
 public class EmisoraActivity extends BaseActivity {
 
     TabLayout tabLayout;
-    //FragmentTransaction fragmentTransaction;
+    FragmentTransaction fragmentTransaction;
     private int[] tabTextUser = {R.string.tabTitPerfilEmisora, R.string.tabTitChat, R.string.tabTitVotaciones, R.string.tabTitTendencias, R.string.tabTitProgramacion};
     private int[] tabTextAdmin = {R.string.tabTitPerfil, R.string.tabTitChat, R.string.tabTitEstadisticas, R.string.tabTitGPS, R.string.tabTitProgramacion};
     private int[] tabIconsUser_Des = {
@@ -70,6 +70,15 @@ public class EmisoraActivity extends BaseActivity {
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.contenedor,fragmento2);
                         fragmentTransaction.commit();*/
+                        break;
+                    case 3:
+                        if (Usuario_Singleton.getInstance().isAdmin()){
+                            GPSFragment gpsFragment = new GPSFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, gpsFragment);
+                            fragmentTransaction.commit();
+                        }
                         break;
                 }
                 cambiarIconoSeleccionado(tab.getPosition());
