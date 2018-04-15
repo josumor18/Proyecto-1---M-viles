@@ -10,8 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity android:name=".Business.LoginActivity"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Business.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,14 +41,19 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Business.MainActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Business.EmisoraActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Business.ListaEmisorasActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Business.RegistrarActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Business.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Business.EmisoraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Business.ListaEmisorasActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Business.RegistrarActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Business.PerfilActivity"></activity>
     </application>
 
 </manifest>
