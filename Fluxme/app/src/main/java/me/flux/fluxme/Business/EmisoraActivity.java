@@ -93,6 +93,15 @@ public class EmisoraActivity extends BaseActivity {
                             fragmentTransaction.commit();
                         }
                         break;
+                    case 4:
+                        if (Usuario_Singleton.getInstance().isAdmin()){
+                            ProgramacionAdminFragment programacionAdminFragment = new ProgramacionAdminFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, programacionAdminFragment);
+                            fragmentTransaction.commit();
+                        }
+                        break;
                 }
                 cambiarIconoSeleccionado(tab.getPosition());
             }
