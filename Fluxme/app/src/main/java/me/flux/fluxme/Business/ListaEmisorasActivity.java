@@ -36,13 +36,13 @@ import me.flux.fluxme.R;
 
 public class ListaEmisorasActivity extends BaseActivity {
 
-    private Double longitud;
-    private Double latitud;
+    /*private Double longitud;
+    private Double latitud;*/
     private ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
     ListView lvEmisoras;
     RelativeLayout rlLoaderEmisoras;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    /*LocationManager locationManager;
+    LocationListener locationListener;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class ListaEmisorasActivity extends BaseActivity {
 
         initToolbar();
 
+        /*
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -77,7 +78,7 @@ public class ListaEmisorasActivity extends BaseActivity {
 
             }
         };
-
+*/
         lvEmisoras = findViewById(R.id.listaEmisoras);
         lvEmisoras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,7 +119,7 @@ public class ListaEmisorasActivity extends BaseActivity {
         rlLoaderEmisoras.setVisibility(View.INVISIBLE);
     }
 
-    private void obtenerUbicacion(){
+    /*private void obtenerUbicacion(){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
         }
@@ -132,7 +133,7 @@ public class ListaEmisorasActivity extends BaseActivity {
             latitud = lastLocation.getLatitude();
 
         }
-    }
+    }*/
 
     private void cargarEmisoras(JSONObject jsonResult){
 
@@ -238,7 +239,7 @@ public class ListaEmisorasActivity extends BaseActivity {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    public class ExecuteAddLocations extends AsyncTask<String, Void, String> {
+    /*public class ExecuteAddLocations extends AsyncTask<String, Void, String> {
         boolean isOk = false;
 
         @Override
@@ -260,5 +261,5 @@ public class ListaEmisorasActivity extends BaseActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
         }
-    }
+    }*/
 }
