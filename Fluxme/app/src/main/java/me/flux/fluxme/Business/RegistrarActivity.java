@@ -100,6 +100,7 @@ public class RegistrarActivity extends AppCompatActivity{
         private String name;
         private String email;
         private String password;
+        private boolean isRegistered;
 
         public ExecuteRegister(String name,String email, String password){
             this.name = name;
@@ -110,12 +111,10 @@ public class RegistrarActivity extends AppCompatActivity{
         @Override
         protected String doInBackground(String... strings) {
 
-            try {
-                API_Access api = API_Access.getInstance();
-                api.register(name,email,password);
-            } catch (Error e) {
-                e.printStackTrace();
-            }
+
+            API_Access api = API_Access.getInstance();
+            isRegistered = api.register(name,email,password);
+
 
 
             return null;
@@ -124,9 +123,20 @@ public class RegistrarActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            if(isRegistered) {
+                Toast.makeText(RegistrarActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else {
+                /*String mensaje = "Fail";
+                try {
+                    mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
 
-            Toast.makeText(RegistrarActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-            finish();
+                Toast.makeText(RegistrarActivity.this, "Registro fallido" , Toast.LENGTH_SHORT).show();
+            }
 
         }
 

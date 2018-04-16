@@ -12,56 +12,128 @@
 
     <ImageView
         android:id="@+id/perfilImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/appbar"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/PerfilLinearLayout"
+        android:layout_marginStart="13dp"
         app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 
     <LinearLayout
         android:id="@+id/PerfilLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/perfilImageView"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="25dp"
+        android:layout_width="220dp"
+        android:layout_height="150dp"
+
+        android:layout_marginLeft="170dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="75dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/PerfilNombreTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre" />
+            android:text="Nombre"
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/PerfilNombreEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Juanito" />
+            android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/PerfilUsuarioTextView"
+            android:id="@+id/PerfilCorreoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Usuario" />
+            android:text="Correo electronico"
+            android:textSize="16sp" />
+
 
         <EditText
-            android:id="@+id/PerfilUsuarioEditText"
+            android:id="@+id/PerfilCorreoEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="juancho87" />
+            android:inputType="textEmailAddress"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PerfilContrasenaLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_below="@+id/PerfilLinearLayout"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="25dp"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/CambiarContrasenaTextView"
+            android:id="@+id/TextView"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Camibar Contraseña:"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/PerfilContrasenaTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cambiar contraseña" />
+            android:text="Contraseña"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/PerfilContrasenaEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/PerfilNuevaContrasenaTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nueva Contraseña"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/PerfilNuevaContrasenaEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/PerfilConfirmConTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirmar Contraseña"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/PerfilConfirmConEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="13sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignEnd="@+id/PerfilContrasenaLinearLayout"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/PerfilContrasenaLinearLayout"
+            android:onClick="guardarCambiosClicked"
+            android:text="Guardar cambios" />
 
     </LinearLayout>
 
