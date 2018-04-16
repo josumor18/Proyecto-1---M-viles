@@ -11,6 +11,7 @@ public class EmisoraActivity extends BaseActivity {
 
     TabLayout tabLayout;
     FragmentTransaction fragmentTransaction;
+    //PerfilEmisoraFragment perfil;
     private int[] tabTextUser = {R.string.tabTitPerfilEmisora, R.string.tabTitChat, R.string.tabTitVotaciones, R.string.tabTitTendencias, R.string.tabTitProgramacion};
     private int[] tabTextAdmin = {R.string.tabTitPerfil, R.string.tabTitChat, R.string.tabTitEstadisticas, R.string.tabTitGPS, R.string.tabTitProgramacion};
     private int[] tabIconsUser_Des = {
@@ -52,16 +53,28 @@ public class EmisoraActivity extends BaseActivity {
         tabLayout = findViewById(R.id.appbartabs);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         cargarTabLayout();
+
+        /*perfil = new PerfilEmisoraFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contenedor,perfil);
+        fragmentTransaction.commit();*/
+
+        PerfilEmisoraFragment perfil=new PerfilEmisoraFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.contenedor,perfil);
+        fragmentTransaction.commit();
+
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()){
                     case 0:
-                        /*fr1 fragmento1 = new fr1();
 
+                        PerfilEmisoraFragment perfil=new PerfilEmisoraFragment();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.contenedor,fragmento1);
-                        fragmentTransaction.commit();*/
+                        fragmentTransaction.replace(R.id.contenedor,perfil);
+                        fragmentTransaction.commit();
                         break;
                     case 1:
                         /*
