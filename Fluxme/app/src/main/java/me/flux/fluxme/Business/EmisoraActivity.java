@@ -70,11 +70,18 @@ public class EmisoraActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch(tab.getPosition()){
                     case 0:
-
-                        PerfilEmisoraFragment perfil=new PerfilEmisoraFragment();
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.contenedor,perfil);
-                        fragmentTransaction.commit();
+                        if(!Usuario_Singleton.getInstance().isAdmin()) {
+                            PerfilEmisoraFragment perfil = new PerfilEmisoraFragment();
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, perfil);
+                            fragmentTransaction.commit();
+                        }
+                        else if (Usuario_Singleton.getInstance().isAdmin()){
+                            PerfilEmisoraAdminFragment perfilAdmin = new PerfilEmisoraAdminFragment();
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, perfilAdmin);
+                            fragmentTransaction.commit();
+                        }
                         break;
                     case 1:
                         /*

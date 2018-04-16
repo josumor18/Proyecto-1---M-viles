@@ -70,13 +70,24 @@ public class API_Access {
 
     }
 
-    //Falta backend
+
     public boolean setSuscription(String idUser, String idEmisora){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("idUser", idUser);
         Parametros.put("idEmisora", idEmisora);
-        return makePOSTRequest("emisoras/suscription", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+        return makePOSTRequest("user_emisoras/suscription", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
+
+    //Falta backend
+    public boolean change_emisora(String nombre, String descripcion){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("nombre", nombre);
+        Parametros.put("descripcion", descripcion);
+        return makePOSTRequest("emisoras/change_emisora", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+
 
     }
     public boolean login(String email, String password){
