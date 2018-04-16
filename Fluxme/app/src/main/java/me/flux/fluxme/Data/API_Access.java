@@ -40,6 +40,25 @@ public class API_Access {
     private API_Access() {
     }
 
+    public boolean change_pass(String id ,String name, String email, String password, String new_password){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("name",name);
+        Parametros.put("email",email);
+        Parametros.put("password", password);
+        Parametros.put("new_password", new_password);
+        return makePOSTRequest("users/change_pass", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean change_user(String id ,String name, String email){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id", id);
+        Parametros.put("name",name);
+        Parametros.put("email",email);
+        return makePOSTRequest("users/change_user", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
     public boolean register(String username, String email, String password){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
