@@ -69,6 +69,16 @@ public class API_Access {
         return makePOSTRequest("users/register", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
 
     }
+
+    //Falta backend
+    public boolean setSuscription(String idUser, String idEmisora){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("idUser", idUser);
+        Parametros.put("idEmisora", idEmisora);
+        return makePOSTRequest("emisoras/suscription", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
     public boolean login(String email, String password){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
