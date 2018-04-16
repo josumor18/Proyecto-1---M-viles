@@ -1,0 +1,78 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.flux.fluxme.Business.PerfilEmisoraFragment">
+
+
+    <RelativeLayout
+        android:id="@+id/rlPerfilEmisora"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlImage"
+            android:layout_width="match_parent"
+            android:layout_height="190dp">
+
+            <ImageView
+                android:id="@+id/imgLogoFluxme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="12dp"
+                app:srcCompat="@drawable/radio_icono" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="187dp"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/txtNombreEmisora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Prueba"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="38sp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/btnSubscribirse"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+
+                android:layout_marginTop="10dp"
+                android:background="@color/colorAccent"
+                android:text="Suscribirse"
+                android:textColor="@android:color/background_light"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/txtDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
+                android:text="Prueba"
+                android:textAlignment="viewStart"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="20sp"
+                android:visibility="visible" />
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

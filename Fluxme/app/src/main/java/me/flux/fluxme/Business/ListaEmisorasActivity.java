@@ -36,7 +36,7 @@ import me.flux.fluxme.R;
 
 public class ListaEmisorasActivity extends BaseActivity {
 
-    private ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
+    public static ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
     ListView lvEmisoras;
     RelativeLayout rlLoaderEmisoras;
 
@@ -95,13 +95,14 @@ public class ListaEmisorasActivity extends BaseActivity {
     private void cargarEmisoras(JSONObject jsonResult){
 
         try {
+            emisoras.clear();
             String token = jsonResult.getString("authentication_token");
             Usuario_Singleton.getInstance().setAuth_token(token);
             LoginActivity.actualizarAuth_Token(token, getApplicationContext());
             JSONArray jsonEmisoras = jsonResult.getJSONArray("emisoras");
             for(int i = 0; i < jsonEmisoras.length(); i++) {
                 JSONObject emisora = (JSONObject) jsonEmisoras.get(i);
-                emisoras.add(new Emisora(emisora.getInt("id"), emisora.getString("nombre"), emisora.getString("link"), emisora.getInt("id_admin")));
+                emisoras.add(new Emisora(emisora.getInt("id"), emisora.getString("nombre"), emisora.getString("link"), emisora.getInt("id_admin"),emisora.getString("descripcion")));
             }
         } catch (JSONException e) {
             e.printStackTrace();

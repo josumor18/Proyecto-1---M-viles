@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this instanceof ListaEmisorasActivity){
+        //if(this instanceof ListaEmisorasActivity){
             locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             locationListener = new LocationListener() {
                 @Override
@@ -74,7 +74,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             };
 
-        }
+        //}
         SharedPreferences preferences = getSharedPreferences("user.preferences.fluxme", MODE_PRIVATE);
         preferences.edit().putString("idAux", Usuario_Singleton.getInstance().getId()).apply();
 
