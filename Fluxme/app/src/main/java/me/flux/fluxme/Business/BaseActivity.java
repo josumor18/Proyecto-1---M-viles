@@ -20,13 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
-
-import java.util.stream.Stream;
 
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
@@ -51,30 +48,30 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(this instanceof ListaEmisorasActivity){
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                }
+        //if(this instanceof ListaEmisorasActivity){
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+            }
 
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                }
+            }
 
-                @Override
-                public void onProviderEnabled(String s) {
+            @Override
+            public void onProviderEnabled(String s) {
 
-                }
+            }
 
-                @Override
-                public void onProviderDisabled(String s) {
+            @Override
+            public void onProviderDisabled(String s) {
 
-                }
-            };
+            }
+        };
 
-        }
+        //}
         SharedPreferences preferences = getSharedPreferences("user.preferences.fluxme", MODE_PRIVATE);
         preferences.edit().putString("idAux", Usuario_Singleton.getInstance().getId()).apply();
 
@@ -153,11 +150,15 @@ public class BaseActivity extends AppCompatActivity {
                     item.setIcon(R.drawable.play_button_fluxme);
                     Streaming.pause();
                 }else{
-                    if(Streaming.isPrepared()){
-                        //Streaming.setStream(Streaming.getStream());
-                        Streaming.play();
-                        if(Streaming.isIsPlaying()){
-                            item.setIcon(R.drawable.stop_button_fluxme);
+                    String str = Streaming.getStream();
+                    if(!str.isEmpty()){
+                        Streaming.setStream(Streaming.getStream());
+                        if(Streaming.isPrepared()){
+                            Streaming.setStream(Streaming.getStream());
+                            Streaming.play();
+                            if(Streaming.isIsPlaying()){
+                                item.setIcon(R.drawable.stop_button_fluxme);
+                            }
                         }
                     }else{
                         if(!(this instanceof ListaEmisorasActivity) && Streaming.getStream().isEmpty()) {
