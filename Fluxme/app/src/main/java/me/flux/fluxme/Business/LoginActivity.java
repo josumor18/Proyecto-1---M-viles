@@ -352,7 +352,7 @@ public class LoginActivity extends AppCompatActivity {
             if(isLogged){
                 iniciarSesion(API_Access.getInstance().getJsonObjectResponse());
             }else{
-                String mensaje = "Error";
+                String mensaje = "Error al iniciar sesión";
                 try {
                     mensaje = (API_Access.getInstance().getJsonObjectResponse()).getString("message");
                 } catch (JSONException e) {

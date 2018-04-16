@@ -94,7 +94,6 @@ public class BaseActivity extends AppCompatActivity {
                 loc.execute();
             }
         }
-        //Toast.makeText(this, "Restarting", Toast.LENGTH_SHORT).show();
     }
 
     @Override

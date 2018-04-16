@@ -36,13 +36,9 @@ import me.flux.fluxme.R;
 
 public class ListaEmisorasActivity extends BaseActivity {
 
-    /*private Double longitud;
-    private Double latitud;*/
     private ArrayList<Emisora> emisoras = new ArrayList<Emisora>();
     ListView lvEmisoras;
     RelativeLayout rlLoaderEmisoras;
-    /*LocationManager locationManager;
-    LocationListener locationListener;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,29 +52,6 @@ public class ListaEmisorasActivity extends BaseActivity {
 
         initToolbar();
 
-        /*
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        };
-*/
         lvEmisoras = findViewById(R.id.listaEmisoras);
         lvEmisoras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,22 +91,6 @@ public class ListaEmisorasActivity extends BaseActivity {
         }
         rlLoaderEmisoras.setVisibility(View.INVISIBLE);
     }
-
-    /*private void obtenerUbicacion(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
-        }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            longitud = lastLocation.getLongitude();
-            latitud = lastLocation.getLatitude();
-
-        }
-    }*/
 
     private void cargarEmisoras(JSONObject jsonResult){
 
@@ -228,38 +185,12 @@ public class ListaEmisorasActivity extends BaseActivity {
             if(isOk){
                 cargarEmisoras(API_Access.getInstance().getJsonObjectResponse());
             }else{
-                String mensaje = "Error getEmisoras()";
+                String mensaje = "Error al obtener las emisoras";
 
                 Toast.makeText(ListaEmisorasActivity.this, mensaje, Toast.LENGTH_SHORT).show();
-                //rlLoader.setVisibility(View.INVISIBLE);
-                //rlLogin.setVisibility(View.VISIBLE);
             }
             rlLoaderEmisoras.setVisibility(View.INVISIBLE);
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-    /*public class ExecuteAddLocations extends AsyncTask<String, Void, String> {
-        boolean isOk = false;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            API_Access api = API_Access.getInstance();
-            Usuario_Singleton user = Usuario_Singleton.getInstance();
-
-            isOk = api.addLocation(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), Double.toString(longitud), Double.toString(latitud));
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }*/
 }
