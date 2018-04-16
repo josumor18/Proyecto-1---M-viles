@@ -235,6 +235,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = c.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
 
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
+        //preferences.edit().putString("tokenAux", auth_token).apply();
     }
 
     public static void cerrarSesion(Context c){
