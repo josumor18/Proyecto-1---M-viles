@@ -40,7 +40,7 @@ public class API_Access {
     private API_Access() {
     }
 
-    public boolean change_pass(String id ,String name, String email, String password, String new_password){
+    public boolean change_pass(String id ,String name, String email, String password, String new_password,String authToken){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("id", id);
@@ -48,15 +48,17 @@ public class API_Access {
         Parametros.put("email",email);
         Parametros.put("password", password);
         Parametros.put("new_password", new_password);
+        Parametros.put("authentication_token",authToken);
         return makePOSTRequest("users/change_pass", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
-    public boolean change_user(String id ,String name, String email){
+    public boolean change_user(String id ,String name, String email,String authToken){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("id", id);
         Parametros.put("name",name);
         Parametros.put("email",email);
+        Parametros.put("authentication_token",authToken);
         return makePOSTRequest("users/change_user", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
     public boolean register(String username, String email, String password){
@@ -71,19 +73,30 @@ public class API_Access {
     }
 
 
-    public boolean setSuscription(String idUser, String idEmisora){
+    public boolean setSuscription(String idUser, String idEmisora,String authToken){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("idUser", idUser);
         Parametros.put("idEmisora", idEmisora);
-        return makePOSTRequest("user_emisoras/suscription", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+        Parametros.put("authentication_token",authToken);
+        return makePOSTRequest("user_emisoras/setSuscription", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+
+    }
+
+    public boolean isSuscripted(String idUser, String idEmisora,String authToken){
+        jsonObjectResponse = new JSONObject();
+        String urlEsp = "user_emisoras/isSuscripted?idUser=" + idUser + "&authentication_token=" + authToken + "&idEmisora=" + idEmisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
 
     }
 
     //Falta backend
-    public boolean change_emisora(String nombre, String descripcion){
+    public boolean change_emisora(String id_user,String auth_token,String id,String nombre, String descripcion){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_user",id_user);
+        Parametros.put("authentication_token",auth_token);
+        Parametros.put("id",id);
         Parametros.put("nombre", nombre);
         Parametros.put("descripcion", descripcion);
         return makePOSTRequest("emisoras/change_emisora", "PUT", true, true, Parametros, HttpsURLConnection.HTTP_OK);
