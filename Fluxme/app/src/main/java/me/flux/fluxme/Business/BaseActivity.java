@@ -168,6 +168,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.item_inicio:
+                isChanging = true;
                 return true;
             case R.id.item_perfil:
                 isChanging = true;
@@ -180,6 +181,13 @@ public class BaseActivity extends AppCompatActivity {
                 isChanging = true;
                 Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
                 startActivity(intentEmisoras);
+
+                main_menu.getItem(0).setEnabled(true);
+                return true;
+            case R.id.item_emisoras_favoritas:
+                isChanging = true;
+                //Intent intentEmisorasFavoritas = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
+                //startActivity(intentEmisorasFavoritas);
 
                 main_menu.getItem(0).setEnabled(true);
                 return true;

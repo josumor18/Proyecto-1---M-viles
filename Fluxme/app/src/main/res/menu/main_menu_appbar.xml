@@ -28,8 +28,13 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/item_emisoras"
-        android:title="Emisoras"
+    android:id="@+id/item_emisoras"
+    android:title="Emisoras"
+    app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_emisoras_favoritas"
+        android:title="Emisoras favoritas"
         app:showAsAction="never" />
 
     <item
