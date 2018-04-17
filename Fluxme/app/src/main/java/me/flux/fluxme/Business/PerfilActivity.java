@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
 
@@ -51,7 +53,7 @@ public class PerfilActivity extends BaseActivity {
             if (!TextUtils.isEmpty(edtCorreo.getText()) && !TextUtils.isEmpty(edtNombre.getText())) {
 
                 ExecuteChange executeChange = new ExecuteChange(user.getId(),
-                        edtNombre.getText().toString(), edtCorreo.getText().toString());
+                        edtNombre.getText().toString(), edtCorreo.getText().toString(),user.getAuth_token());
 
                 executeChange.execute();
             }
@@ -83,7 +85,7 @@ public class PerfilActivity extends BaseActivity {
             if (val1 && val2) {
                 ExecuteChange exChange = new ExecuteChange(user.getId(),edtNombre.getText().toString(),
                         edtCorreo.getText().toString(),edtContrasena.getText().toString(),
-                        edtNuevaCon.getText().toString());
+                        edtNuevaCon.getText().toString(),user.getAuth_token());
 
                 exChange.execute();
             }
@@ -98,21 +100,24 @@ public class PerfilActivity extends BaseActivity {
         private String password;
         private String new_password;
         private int tipoAut=0;
+        private String authToken;
         private boolean isChanged = false;
 
-        public ExecuteChange(String id, String name,String email){
+        public ExecuteChange(String id, String name,String email,String authToken){
             this.name = name;
             this.email = email;
             this.id = id;
+            this.authToken = authToken;
             tipoAut = 0;
         }
 
-        public ExecuteChange(String id, String name,String email,String password , String new_password){
+        public ExecuteChange(String id, String name,String email,String password , String new_password,String authToken){
             this.name = name;
             this.email = email;
             this.id = id;
             this.password = password;
             this.new_password = new_password;
+            this.authToken = authToken;
             tipoAut = 1;
         }
 
@@ -123,9 +128,9 @@ public class PerfilActivity extends BaseActivity {
 
             API_Access api = API_Access.getInstance();
             if(tipoAut==0)
-                isChanged=api.change_user(id,name,email);
+                isChanged=api.change_user(id,name,email,authToken);
             else if(tipoAut==1)
-                isChanged=api.change_pass(id,name,email,password,new_password);
+                isChanged=api.change_pass(id,name,email,password,new_password,authToken);
 
 
 
@@ -138,6 +143,16 @@ public class PerfilActivity extends BaseActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(isChanged) {
+                String token = null;
+                try {
+                    token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
+                    Usuario_Singleton.getInstance().setAuth_token(token);
+                    LoginActivity.actualizarAuth_Token(token, getApplicationContext());
+                    //Si es Activity
+                    //LoginActivity.actualizarAuth_Token(token, this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 user.setEmail(edtCorreo.getText().toString());
                 user.setNombre(edtNombre.getText().toString());
                 Toast.makeText(PerfilActivity.this, "Cambio exitoso", Toast.LENGTH_SHORT).show();

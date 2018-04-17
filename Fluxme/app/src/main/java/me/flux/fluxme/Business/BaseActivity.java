@@ -209,17 +209,21 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void obtenerUbicacion(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
-        }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-            longitud = lastLocation.getLongitude();
-            latitud = lastLocation.getLatitude();
+                LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                longitud = lastLocation.getLongitude();
+                latitud = lastLocation.getLatitude();
+
+            }
+        }catch(Exception e){
+
 
         }
     }

@@ -54,15 +54,19 @@ public class EmisoraActivity extends BaseActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         cargarTabLayout();
 
-        /*perfil = new PerfilEmisoraFragment();
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor,perfil);
-        fragmentTransaction.commit();*/
 
-        PerfilEmisoraFragment perfil=new PerfilEmisoraFragment();
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.contenedor,perfil);
-        fragmentTransaction.commit();
+        if(!Usuario_Singleton.getInstance().isAdmin()) {
+            PerfilEmisoraFragment perfil = new PerfilEmisoraFragment();
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.contenedor, perfil);
+            fragmentTransaction.commit();
+        }
+        else if (Usuario_Singleton.getInstance().isAdmin()){
+            PerfilEmisoraAdminFragment perfilAdmin = new PerfilEmisoraAdminFragment();
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.contenedor, perfilAdmin);
+            fragmentTransaction.commit();
+        }
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

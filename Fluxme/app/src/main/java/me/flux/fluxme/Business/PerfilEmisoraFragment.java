@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
 
@@ -23,6 +25,7 @@ public class PerfilEmisoraFragment extends Fragment {
     Usuario_Singleton user;
     TextView nombre;
     Button btnSubscribirse;
+    ExecuteSuscription executeSuscription;
     public PerfilEmisoraFragment() {
         // Required empty public constructor
 
@@ -35,6 +38,8 @@ public class PerfilEmisoraFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_perfil_emisora, container, false);
+
+        API_Access api_access = API_Access.getInstance();
 
         streaming = Streaming.getInstance();
         user = Usuario_Singleton.getInstance();
@@ -53,12 +58,18 @@ public class PerfilEmisoraFragment extends Fragment {
             }
         }
 
+
+
+       /* executeSuscription = new ExecuteSuscription(user.getId(),streaming.getIdEmisora(),user.getAuth_token(),1);
+        executeSuscription.execute();*/
+
         btnSubscribirse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                btnSubscribirse.setText("Suscrito");  //Quitar esto despues de tener le backend
-                /*ExecuteSuscription executeSuscription = new ExecuteSuscription(user.getId(),streaming.getIdEmisora());
-                executeSuscription.execute();*/
+
+                //btnSubscribirse.setText("Suscrito");  //Quitar esto despues de tener le backend
+                executeSuscription = new ExecuteSuscription(user.getId(),streaming.getIdEmisora(),user.getAuth_token(),0);
+                executeSuscription.execute();
             }
         });
         return v;
@@ -69,13 +80,17 @@ public class PerfilEmisoraFragment extends Fragment {
 
     public class ExecuteSuscription extends AsyncTask<String,Void,String> {
         private String idUser;
+        private String authToken;
         private String idEmisora;
 
         private boolean isDone = false;
+        private int tipo = 0;
 
-        public ExecuteSuscription(String idUser, String idEmisora){
+        public ExecuteSuscription(String idUser, String idEmisora,String authToken,int tipo){
             this.idUser = idUser;
             this.idEmisora = idEmisora;
+            this.authToken = authToken;
+            this.tipo=tipo;
 
         }
 
@@ -84,7 +99,10 @@ public class PerfilEmisoraFragment extends Fragment {
 
 
             API_Access api = API_Access.getInstance();
-            isDone = api.setSuscription(idUser,idEmisora);
+            if(tipo==0)
+                isDone = api.setSuscription(idUser,idEmisora,authToken);
+            else
+                isDone = api.isSuscripted(idUser,idEmisora,authToken);
 
             return null;
         }
@@ -93,8 +111,22 @@ public class PerfilEmisoraFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(isDone) {
-                btnSubscribirse.setText("Suscrito");
+                String token = null;
+                try {
+                    token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
+                    Usuario_Singleton.getInstance().setAuth_token(token);
+                    LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+                    //Si es Activity
+                    //LoginActivity.actualizarAuth_Token(token, this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(tipo==1)
+                    btnSubscribirse.setText("Cancelar Suscripcion");
+
             }
+
+
 
 
         }
