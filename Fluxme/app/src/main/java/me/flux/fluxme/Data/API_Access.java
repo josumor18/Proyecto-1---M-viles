@@ -141,6 +141,12 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getEmisorasFavoritas(String id, String auth_token){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "user_emisoras/getEmisorasFavoritas?id=" + id + "&authentication_token=" + auth_token;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
     public boolean addLocation(String id_user, String auth_token, String id_emisora, String longitud, String latitud){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();

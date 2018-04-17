@@ -186,8 +186,8 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.item_emisoras_favoritas:
                 isChanging = true;
-                //Intent intentEmisorasFavoritas = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
-                //startActivity(intentEmisorasFavoritas);
+                Intent intentEmisorasFavoritas = new Intent(getApplicationContext(), EmisorasFavoritasActivity.class);
+                startActivity(intentEmisorasFavoritas);
 
                 main_menu.getItem(0).setEnabled(true);
                 return true;
