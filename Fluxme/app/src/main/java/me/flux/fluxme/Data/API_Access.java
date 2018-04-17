@@ -90,6 +90,13 @@ public class API_Access {
 
     }
 
+    public boolean deleteSuscription(String idUser, String idEmisora,String authToken){
+        jsonObjectResponse = new JSONObject();
+        String urlEsp = "user_emisoras/deleteSuscription?idUser=" + idUser + "&authentication_token=" + authToken + "&idEmisora=" + idEmisora;
+        return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
+
+    }
+
     //Falta backend
     public boolean change_emisora(String id_user,String auth_token,String id,String nombre, String descripcion){
         jsonObjectResponse = new JSONObject();
@@ -334,7 +341,8 @@ public class API_Access {
             httpsURLConnection.connect();
             int r = httpsURLConnection.getResponseCode();
             String rC = Integer.toString(httpsURLConnection.getResponseCode());
-
+            if(r==200)
+                return true;
         } catch (IOException exception) {
             exception.printStackTrace();
         }

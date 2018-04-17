@@ -26,6 +26,8 @@ public class PerfilEmisoraFragment extends Fragment {
     TextView nombre;
     Button btnSubscribirse;
     ExecuteSuscription executeSuscription;
+
+    private boolean suscrito=false;
     public PerfilEmisoraFragment() {
         // Required empty public constructor
 
@@ -60,8 +62,8 @@ public class PerfilEmisoraFragment extends Fragment {
 
 
 
-       /* executeSuscription = new ExecuteSuscription(user.getId(),streaming.getIdEmisora(),user.getAuth_token(),1);
-        executeSuscription.execute();*/
+        executeSuscription = new ExecuteSuscription(user.getId(),streaming.getIdEmisora(),user.getAuth_token(),1);
+        executeSuscription.execute();
 
         btnSubscribirse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +84,6 @@ public class PerfilEmisoraFragment extends Fragment {
         private String idUser;
         private String authToken;
         private String idEmisora;
-
         private boolean isDone = false;
         private int tipo = 0;
 
@@ -99,9 +100,11 @@ public class PerfilEmisoraFragment extends Fragment {
 
 
             API_Access api = API_Access.getInstance();
-            if(tipo==0)
+            if(tipo==0 && !suscrito)
                 isDone = api.setSuscription(idUser,idEmisora,authToken);
-            else
+            else if (tipo ==0 && suscrito)
+                isDone = api.deleteSuscription(idUser,idEmisora,authToken);
+            else if (tipo ==1)
                 isDone = api.isSuscripted(idUser,idEmisora,authToken);
 
             return null;
@@ -111,18 +114,29 @@ public class PerfilEmisoraFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(isDone) {
-                String token = null;
-                try {
-                    token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
-                    Usuario_Singleton.getInstance().setAuth_token(token);
-                    LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
-                    //Si es Activity
-                    //LoginActivity.actualizarAuth_Token(token, this);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(!(tipo==0 && suscrito)) {
+                    String token = null;
+                    try {
+                        token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
+                        Usuario_Singleton.getInstance().setAuth_token(token);
+                        LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+                        //Si es Activity
+                        //LoginActivity.actualizarAuth_Token(token, this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-                if(tipo==1)
+                if(suscrito){
+                    btnSubscribirse.setText("Suscribirse");
+                    suscrito = false;
+                }
+                else {
                     btnSubscribirse.setText("Cancelar Suscripcion");
+                    suscrito = true;
+                }
+
+
+
 
             }
 
