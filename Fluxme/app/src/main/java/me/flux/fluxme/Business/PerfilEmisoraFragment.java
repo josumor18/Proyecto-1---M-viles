@@ -53,9 +53,11 @@ public class PerfilEmisoraFragment extends Fragment {
         for (Emisora emisora:ListaEmisorasActivity.emisoras){
             if(emisora.getId()==Integer.parseInt(streaming.getIdEmisora())){
                 nombre.setText(emisora.getNombre());
-                if(!emisora.getDescripcion().equals(null)){
+                if(!(emisora.getDescripcion()==null)){
                     descripcion.setText(emisora.getDescripcion());
                 }
+                else
+                    descripcion.setText("No hay descripcion");
 
             }
         }

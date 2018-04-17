@@ -72,7 +72,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Business.PerfilActivity"></activity>
+        <activity android:name=".Business.PerfilActivity" />
+        <activity android:name=".Business.EmisorasFavoritasActivity"></activity>
     </application>
 
 </manifest>
