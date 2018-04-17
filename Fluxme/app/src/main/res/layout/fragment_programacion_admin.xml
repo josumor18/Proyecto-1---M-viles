@@ -82,6 +82,7 @@
                                 android:id="@+id/txtNumTendAdmin1"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="1"
                                 android:textAlignment="center"
@@ -99,8 +100,18 @@
                                     android:id="@+id/edtxtCancion1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentTop="true"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -127,6 +138,7 @@
                                 android:id="@+id/txtNumTendAdmin2"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="2"
                                 android:textAlignment="center"
@@ -145,7 +157,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -171,6 +191,7 @@
                                 android:id="@+id/txtNumTendAdmin3"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="3"
                                 android:textAlignment="center"
@@ -189,7 +210,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -216,6 +245,7 @@
                                 android:id="@+id/txtNumTendAdmin4"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="4"
                                 android:textAlignment="center"
@@ -234,7 +264,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -260,6 +298,7 @@
                                 android:id="@+id/txtNumTendAdmin5"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="5"
                                 android:textAlignment="center"
@@ -278,7 +317,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -305,6 +352,7 @@
                                 android:id="@+id/txtNumTendAdmin6"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="6"
                                 android:textAlignment="center"
@@ -323,7 +371,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista6"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -349,6 +405,7 @@
                                 android:id="@+id/txtNumTendAdmin7"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="7"
                                 android:textAlignment="center"
@@ -367,7 +424,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista7"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -394,6 +459,7 @@
                                 android:id="@+id/txtNumTendAdmin8"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="8"
                                 android:textAlignment="center"
@@ -412,7 +478,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista8"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -438,6 +512,7 @@
                                 android:id="@+id/txtNumTendAdmin9"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="9"
                                 android:textAlignment="center"
@@ -456,7 +531,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista9"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
@@ -483,6 +566,7 @@
                                 android:id="@+id/txtNumTendAdmin10"
                                 android:layout_width="200dp"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:text="10"
                                 android:textAlignment="center"
@@ -501,7 +585,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:ems="10"
-                                    android:hint="Nombre de la canción"
+                                    android:hint="Canción"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/edtxtArtista10"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Artista"
                                     android:inputType="textPersonName" />
 
                                 <EditText
