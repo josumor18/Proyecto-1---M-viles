@@ -32,7 +32,7 @@ import me.flux.fluxme.R;
  */
 public class ProgramacionAdminFragment extends Fragment {
 
-    private ArrayList<Tendencia> tendencias = new ArrayList<Tendencia>();
+    private ArrayList<CancionTendencia> tendencias = new ArrayList<CancionTendencia>();
 
     private  ArrayList<EditText> nombresCanciones = new ArrayList<EditText>();
     private  ArrayList<EditText> nombresArtistas = new ArrayList<EditText>();
@@ -156,20 +156,20 @@ public class ProgramacionAdminFragment extends Fragment {
 
    private void llenarTextBoxex(){
        for (int i = 0; i < 10; i++){
-           Tendencia tend = getTendeciaByPosicion(i+1);
-           nombresCanciones.get(i).setText(tend.cancion);
-           nombresArtistas.get(i).setText(tend.artista);
-           linksImgsCanciones.get(i).setText(tend.link);
+           CancionTendencia tend = getTendeciaByPosicion(i+1);
+           nombresCanciones.get(i).setText(tend.getCancion());
+           nombresArtistas.get(i).setText(tend.getArtista());
+           linksImgsCanciones.get(i).setText(tend.getLink());
        }
    }
 
-   private Tendencia getTendeciaByPosicion(int pos){
-       for(Tendencia t:tendencias){
-           if(t.posicion == pos){
+   private CancionTendencia getTendeciaByPosicion(int pos){
+       for(CancionTendencia t:tendencias){
+           if(t.getPosicion() == pos){
                return t;
            }
        }
-       return new Tendencia(pos, "", "", "");
+       return new CancionTendencia(pos, "", "", "");
    }
 
     private void cargarTendencias(JSONObject jsonResult){
@@ -180,7 +180,7 @@ public class ProgramacionAdminFragment extends Fragment {
             JSONArray jsonTendencias = jsonResult.getJSONArray("trending");
             for(int i = 0; i < jsonTendencias.length(); i++) {
                 JSONObject tendencia = (JSONObject) jsonTendencias.get(i);
-                tendencias.add(new Tendencia(tendencia.getInt("posicion"), tendencia.getString("cancion"), tendencia.getString("artista"), tendencia.getString("imagen")));
+                tendencias.add(new CancionTendencia(tendencia.getInt("posicion"), tendencia.getString("cancion"), tendencia.getString("artista"), tendencia.getString("imagen")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,20 +247,6 @@ public class ProgramacionAdminFragment extends Fragment {
                 }
 
             }
-        }
-    }
-
-    private class Tendencia{
-       int posicion;
-       String cancion;
-       String artista;
-       String link;
-
-        public Tendencia(int posicion, String cancion, String artista, String link) {
-            this.posicion = posicion;
-            this.cancion = cancion;
-            this.artista = artista;
-            this.link = link;
         }
     }
 }
