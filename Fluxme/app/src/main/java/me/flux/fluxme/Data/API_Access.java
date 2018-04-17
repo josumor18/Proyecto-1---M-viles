@@ -142,44 +142,35 @@ public class API_Access {
         jsonArrayResponse = new JSONArray();
         String urlEsp = "ubicaciones/del_ubicacion?id_user=" + id + "&authentication_token=" + auth_token;
         return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
-        /*HashMap<String, String> Parametros = new HashMap<String, String>();
-        Parametros.put("id", id);
-        Parametros.put("authentication_token", auth_token);
-        return makePOSTRequest("ubicaciones/del_ubicacion", "DELETE", true, true, Parametros, HttpsURLConnection.HTTP_OK);*/
     }
 
+    public boolean addTrending(String id_user, String auth_token, String id_emisora, String tendencias){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_user", id_user);
+        Parametros.put("authentication_token", auth_token);
+        Parametros.put("id_emisora", id_emisora);
+        Parametros.put("tendencias", tendencias);
+        return makePOSTRequest("trendings/add", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getTrending(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "trendings/get?id=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
         return jsonObjectResponse;
     }
-
-    public  JSONArray getJsonArrayResponse(){
-        Log.d("estado: ", ""+estadoRequest);
-        return jsonArrayResponse;
-    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    private boolean makeDELETERequest(String urlEsp, String metodo, int responseCode){
-        URL url;
-        HttpsURLConnection httpsURLConnection;
-
-        try {
-            url = new URL(url_base + urlEsp);
-            httpsURLConnection = (HttpsURLConnection) url.openConnection();
-            httpsURLConnection.setRequestMethod("DELETE");
-            httpsURLConnection.setDoOutput(false);
-            httpsURLConnection.setDoInput(true);
-            httpsURLConnection.connect();
-            int r = httpsURLConnection.getResponseCode();
-            String rC = Integer.toString(httpsURLConnection.getResponseCode());
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-        return false;
-    }
 
     /////////////////////////////////////////////// Métodos que ejecutan las solicitudes ////////////////////////////////////////////
+    // Solicitud para PSOTs
     private boolean makePOSTRequest(String urlEsp, String metodo, boolean doInput, boolean doOutput, HashMap<String, String> Parametros, int responseCode){
         String result = "";
         URL url;
@@ -263,7 +254,7 @@ public class API_Access {
         return result.toString();
     }
 
-
+    // Solicitud para GETs
     private boolean makeGETRequest(String urlEsp, String metodo, int responseCode) {
         String result = "";
         URL url;
@@ -312,6 +303,27 @@ public class API_Access {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Solicitud para DELETEs
+    private boolean makeDELETERequest(String urlEsp, String metodo, int responseCode){
+        URL url;
+        HttpsURLConnection httpsURLConnection;
+
+        try {
+            url = new URL(url_base + urlEsp);
+            httpsURLConnection = (HttpsURLConnection) url.openConnection();
+            httpsURLConnection.setRequestMethod("DELETE");
+            httpsURLConnection.setDoOutput(false);
+            httpsURLConnection.setDoInput(true);
+            httpsURLConnection.connect();
+            int r = httpsURLConnection.getResponseCode();
+            String rC = Integer.toString(httpsURLConnection.getResponseCode());
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
         return false;
     }
