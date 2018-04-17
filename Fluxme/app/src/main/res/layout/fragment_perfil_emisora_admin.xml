@@ -55,23 +55,29 @@
                     android:text="Descripcion:"
                     android:textSize="28sp" />
 
-                <EditText
-                    android:id="@+id/edtDescripcion"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="20dp"
-                    android:text="Prueba"
-                    android:textAlignment="viewStart"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="20sp"
-                    android:visibility="visible" />
+                    android:layout_height="150dp">
+
+                    <EditText
+                        android:id="@+id/edtDescripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="20dp"
+                        android:text="Prueba"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="20sp"
+                        android:visibility="visible" />
+                </ScrollView>
 
                 <Button
                     android:id="@+id/btn_guardarCambios"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:text="Guardar Cambios" />
 
 
