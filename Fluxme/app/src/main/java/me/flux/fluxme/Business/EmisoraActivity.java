@@ -102,6 +102,12 @@ public class EmisoraActivity extends BaseActivity {
                             fragmentTransaction = getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.contenedor, gpsFragment);
                             fragmentTransaction.commit();
+                        }else{
+                            TendenciasFragment tendenciasFragment = new TendenciasFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, tendenciasFragment);
+                            fragmentTransaction.commit();
                         }
                         break;
                     case 4:
