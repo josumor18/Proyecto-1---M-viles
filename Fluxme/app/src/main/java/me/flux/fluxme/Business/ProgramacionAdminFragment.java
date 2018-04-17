@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +49,8 @@ public class ProgramacionAdminFragment extends Fragment {
     RadioButton rbProgramacion;
     RadioButton rbTendencias;
     RadioGroup rgrp_Opcion;
+
+    String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
     private RadioGroup.OnCheckedChangeListener checkedChangeListener = new RadioGroup.OnCheckedChangeListener(){
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -73,6 +79,39 @@ public class ProgramacionAdminFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_programacion_admin, container, false);
         rlProgSemAdmin = view.findViewById(R.id.rlProgSemAdmin);
         rlTendAdmin = view.findViewById(R.id.rlTendAdmin);
+
+        Spinner spDia = view.findViewById(R.id.sp_dia);
+
+
+        ArrayAdapter aa = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,listDias);
+
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        spDia.setAdapter(aa);
+
+        spDia.setSelection(0, true);
+        View vi = spDia.getSelectedView();
+        ((TextView)vi).setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        TextView spinnerText = (TextView) spDia.getChildAt(0);
+
+        spinnerText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        //Set the listener for when each option is clicked.
+        spDia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                //Change the selected item's text color
+                ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
 
         btnSaveTendencias = view.findViewById(R.id.btnSaveTendencias);
         btnSaveTendencias.setOnClickListener(new View.OnClickListener() {
