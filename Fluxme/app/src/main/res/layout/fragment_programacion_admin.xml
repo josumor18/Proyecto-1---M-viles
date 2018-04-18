@@ -52,59 +52,66 @@
                 android:scrollbars="horizontal"
                 android:visibility="visible">
 
-                <ScrollView
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <Spinner
+                        android:id="@+id/sp_dia"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:popupBackground="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingTop="10dp"
+                        android:text="Horas:"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <Spinner
+                        android:id="@+id/sp_horas"
+                        android:layout_width="150dp"
+                        android:layout_height="25dp"
+                        android:gravity="center_horizontal"
+                        android:popupBackground="@color/colorPrimary" />
+
+
+                    <EditText
+                        android:id="@+id/edt_titulo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" >
+                        android:ems="10"
+                        android:gravity="center"
+                        android:hint="Titulo"
+                        android:inputType="textPersonName" />
 
-                        <Spinner
-                            android:id="@+id/sp_dia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:popupBackground="@color/colorPrimary" />
-
-                        <TextView
-                            android:id="@+id/textView8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Horas:" />
+                    <Button
+                        android:id="@+id/btn_aceptar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Aceptar" />
 
 
-                        <Spinner
-                            android:id="@+id/sp_horas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:popupBackground="@color/colorPrimary" />
-
-
-                        <EditText
-                            android:id="@+id/edt_titulo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="Titulo"
-                            android:inputType="textPersonName" />
-
-                        <Button
-                            android:id="@+id/btn_aceptar"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Aceptar" />
 
                         <ListView
                             android:id="@+id/lv_programacion"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent" >
+                            android:layout_height="wrap_content">
 
                         </ListView>
 
-                    </LinearLayout>
-                </ScrollView>
+                </LinearLayout>
+
 
             </RelativeLayout>
 

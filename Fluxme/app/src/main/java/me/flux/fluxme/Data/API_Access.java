@@ -84,6 +84,12 @@ public class API_Access {
 
     }
 
+    public boolean getProgramacion(String idUser, String auth_token, String idEmisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "programacions/getProgramacion?idUser=" + idUser + "&authentication_token=" + auth_token + "&idEmisora=" + idEmisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
     public boolean setSuscription(String idUser, String idEmisora,String authToken){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
