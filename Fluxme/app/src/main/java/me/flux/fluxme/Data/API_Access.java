@@ -236,6 +236,12 @@ public class API_Access {
         return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getCommentsByEmisoraID(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "comentarios/get_comentarios?idUser=" + id + "&authentication_token=" + auth_token + "&emisora_id=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
