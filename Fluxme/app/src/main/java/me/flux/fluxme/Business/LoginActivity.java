@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String USER_PREFERENCES = "user.preferences.fluxme";
     private static final String PREFERENCE_EMAIL = "string.email.sesion";
     private static final String PREFERENCE_AUTH_TOKEN = "string.token.sesion";
+    private static final String PREFERENCE_FOTO_TOKEN = "string.foto.sesion";
     private static final String PREFERENCE_SESION_ACTIVA = "boolean.sesion.isActiva";
 
     private static String email = "";
@@ -73,8 +74,9 @@ public class LoginActivity extends AppCompatActivity {
             String[] userData = getUsuarioSesion();
             email = userData[0];
             token = userData[1];
+            foto = userData[2];
             nombre_completo = "Usuario App";//Se obtiene de BD por medio del username
-            foto = "Fotoooo";//Se obtiene de BD por medio del username
+            //foto = "Fotoooo";//Se obtiene de BD por medio del username
             ///IR AL ASYNKTASK pero hacer un metodo para iniciar sesion solo con token
             ExecuteLogin login = new ExecuteLogin(email, token);
             login.setAuth_Token(email, token);
@@ -85,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences preferences = this.getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
             preferences.edit().putString(PREFERENCE_EMAIL, "").apply();
             preferences.edit().putString(PREFERENCE_AUTH_TOKEN, "").apply();
+            preferences.edit().putString(PREFERENCE_FOTO_TOKEN, "").apply();
             preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, false).apply();
         }
 
@@ -228,6 +231,7 @@ public class LoginActivity extends AppCompatActivity {
         //Esto es para probar unicamente...después habría que ver si lo que se guarda son todos los datos del usuario o que...
         preferences.edit().putString(PREFERENCE_EMAIL, correo).apply();
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, auth_token).apply();
+        preferences.edit().putString(PREFERENCE_FOTO_TOKEN, foto).apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, chckSesionActiva.isChecked()).apply();
     }
 
@@ -261,15 +265,17 @@ public class LoginActivity extends AppCompatActivity {
 
         preferences.edit().putString(PREFERENCE_EMAIL, email).apply();
         preferences.edit().putString(PREFERENCE_AUTH_TOKEN, "").apply();
+        preferences.edit().putString(PREFERENCE_FOTO_TOKEN, "").apply();
         preferences.edit().putBoolean(PREFERENCE_SESION_ACTIVA, false).apply();
     }
 
     public String[] getUsuarioSesion(){
-        String[] userData = new String[2];
+        String[] userData = new String[3];
         SharedPreferences preferences = getSharedPreferences(USER_PREFERENCES, MODE_PRIVATE);
         //Esto es para probar unicamente...después habría que ver si lo que se obtiene son todos los datos del usuario o que (segun lo que se haya guardado)...
         userData[0] = preferences.getString(PREFERENCE_EMAIL, "");
         userData[1] = preferences.getString(PREFERENCE_AUTH_TOKEN, "");
+        userData[2] = preferences.getString(PREFERENCE_FOTO_TOKEN, "");
         return userData;
     }
 

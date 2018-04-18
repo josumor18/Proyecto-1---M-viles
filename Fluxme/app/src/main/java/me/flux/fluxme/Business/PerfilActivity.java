@@ -1,14 +1,23 @@
 package me.flux.fluxme.Business;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
@@ -21,6 +30,7 @@ public class PerfilActivity extends BaseActivity {
     EditText edtContrasena;
     EditText edtNuevaCon;
     EditText edtConfirmCon;
+    ImageView perfilImageView;
 
 
     @Override
@@ -43,6 +53,21 @@ public class PerfilActivity extends BaseActivity {
         edtContrasena = findViewById(R.id.PerfilContrasenaEditText);
         edtNuevaCon = findViewById(R.id.PerfilNuevaContrasenaEditText);
         edtConfirmCon = findViewById(R.id.PerfilConfirmConEditText);
+
+        perfilImageView = findViewById(R.id.perfilImageView);
+        if(!(user.getFoto().isEmpty())){
+            HttpGetBitmap request = new HttpGetBitmap();
+            Bitmap coverImage = null;
+            try {
+                coverImage = request.execute(0).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+            perfilImageView.setImageBitmap(coverImage);
+        }
     }
 
     public void guardarCambiosClicked(View view){
@@ -166,5 +191,50 @@ public class PerfilActivity extends BaseActivity {
 
 
 
+    }
+
+
+    public class HttpGetBitmap extends AsyncTask<Integer, Void, Bitmap> {
+        private static final String REQUEST_METHOD = "GET";
+        private static final int READ_TIMEOUT = 15000;
+        private static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected Bitmap doInBackground(Integer... index){
+
+            int i = index[0];
+            Bitmap cover;
+
+            String address = Usuario_Singleton.getInstance().getFoto();
+
+            try {
+
+                //Create a URL object holding our url
+                URL myUrl = new URL(address);
+
+                //Create a connection
+                HttpURLConnection connection =(HttpURLConnection)
+                        myUrl.openConnection();
+
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+                //Connect to our url
+                connection.setDoInput(true);
+                connection.connect();
+
+                //Create a new InputStream
+                InputStream input = connection.getInputStream();
+                cover = BitmapFactory.decodeStream(input);
+
+            }
+            catch(IOException e){
+                e.printStackTrace();
+                cover = null;
+            }
+            return cover;
+        }
     }
 }
