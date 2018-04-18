@@ -61,14 +61,18 @@ public class TendenciasFragment extends Fragment {
             tendencias.clear();
 
             JSONArray jsonTendencias = jsonResult.getJSONArray("trending");
-            for(int i = 0; i < jsonTendencias.length(); i++) {
-                JSONObject tendencia = (JSONObject) jsonTendencias.get(i);
-                tendencias.add(new CancionTendencia(tendencia.getInt("posicion"), tendencia.getString("cancion"), tendencia.getString("artista"), tendencia.getString("imagen")));
+            //for(int i = 0; i < jsonTendencias.length(); i++) {
+            for(int i = 0; i < 10; i++) {
+                if(jsonTendencias.length() > 0){
+                    JSONObject tendencia = (JSONObject) jsonTendencias.get(i);
+                    tendencias.add(new CancionTendencia(tendencia.getInt("posicion"), tendencia.getString("cancion"), tendencia.getString("artista"), tendencia.getString("imagen")));
+                }else{
+                    tendencias.add(new CancionTendencia(i+1, "", "", ""));
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         ordenarTendencias();
         lvListaTendencias.setAdapter(new TendenciasAdapter());
     }

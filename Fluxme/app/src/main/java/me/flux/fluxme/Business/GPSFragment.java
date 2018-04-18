@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -125,24 +124,34 @@ public class GPSFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void getMyLocation(boolean init){
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 0);
-        }
-        else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        try{
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            mMap.clear();
+                if(lastLocation == null){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-            LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                    lastLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
 
-            mMap.addMarker(new MarkerOptions().position(location).title("Tú"));
+                mMap.clear();
 
-            if(init){
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+
+                mMap.addMarker(new MarkerOptions().position(location).title("Tú"));
+
+                if (init) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                }
             }
+        }catch(Exception e){
+            Toast.makeText(getActivity(), "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void cargarLocations(JSONObject jsonResult){
