@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/commentEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -32,10 +32,11 @@
                 android:inputType="textPersonName" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/sendComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="onSendComment"
                 android:text="Enviar" />
         </LinearLayout>
     </RelativeLayout>

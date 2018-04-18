@@ -1,7 +1,6 @@
 package me.flux.fluxme.Business;
 
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
@@ -97,12 +94,17 @@ public class ChatFragment extends Fragment {
         }
     }
 
+    public void enviarComentario(String comentario) {
+        ExecutePostComentarios executePostComentarios = new ExecutePostComentarios(comentario);
+        executePostComentarios.execute();
+
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////
     private class ExecuteGetComentarios extends AsyncTask<String, Void, String> {
         boolean isOk = false;
 
         public ExecuteGetComentarios() {
-
         }
 
 
@@ -135,6 +137,51 @@ public class ChatFragment extends Fragment {
                     cargarComentarios(result);
 
                     Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class ExecutePostComentarios extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+        String comentario;
+
+        public ExecutePostComentarios(String comentario) {
+            this.comentario = comentario;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.postComment(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), user.getNombre(), comentario);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(isOk){
+                String token = null;
+                try {
+                    JSONObject result = API_Access.getInstance().getJsonObjectResponse();
+                    token = (result).getString("authentication_token");
+                    Usuario_Singleton.getInstance().setAuth_token(token);
+                    LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+
+                    ExecuteGetComentarios executeGetComentarios = new ExecuteGetComentarios();
+                    executeGetComentarios.execute();
+
+                    Toast.makeText(getActivity(), "Comentario publicado", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

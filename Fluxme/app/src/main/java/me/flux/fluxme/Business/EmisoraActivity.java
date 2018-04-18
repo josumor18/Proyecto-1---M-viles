@@ -4,10 +4,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import me.flux.fluxme.R;
 
 public class EmisoraActivity extends BaseActivity {
+
+    private ChatFragment chatFragment;
 
     TabLayout tabLayout;
     FragmentTransaction fragmentTransaction;
@@ -88,10 +93,10 @@ public class EmisoraActivity extends BaseActivity {
                         }
                         break;
                     case 1:
-                        ChatFragment ChatFragment = new ChatFragment();
+                        chatFragment = new ChatFragment();
 
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.contenedor, ChatFragment);
+                        fragmentTransaction.replace(R.id.contenedor, chatFragment);
                         fragmentTransaction.commit();
                         break;
                     case 2:
@@ -208,5 +213,16 @@ public class EmisoraActivity extends BaseActivity {
         } else {
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Des[pos]);
         }
+    }
+
+    public void onSendComment(View v) {
+        EditText commentarioTextView = this.findViewById(R.id.commentEditText);
+        String comentario = commentarioTextView.getText().toString();
+
+        if (!comentario.equals("")) {
+            chatFragment.enviarComentario(comentario);
+        }
+
+        commentarioTextView.setText("");
     }
 }

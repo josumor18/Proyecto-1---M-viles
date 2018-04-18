@@ -242,6 +242,17 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean postComment(String id_user, String auth_token, String id_emisora, String user_name, String comment){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("idUser", id_user);
+        Parametros.put("authentication_token", auth_token);
+        Parametros.put("emisora_id", id_emisora);
+        Parametros.put("comentarista", user_name);
+        Parametros.put("cuerpo", comment);
+        return makePOSTRequest("comentarios/add_comentarios", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
