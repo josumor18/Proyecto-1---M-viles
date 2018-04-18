@@ -65,6 +65,7 @@ public class ProgramacionAdminFragment extends Fragment {
     Spinner spDia;
     Spinner spHora;
     EditText edtTitulo;
+    ListView lvProgramacion;
 
     private RadioGroup.OnCheckedChangeListener checkedChangeListener = new RadioGroup.OnCheckedChangeListener(){
         @Override
@@ -103,7 +104,7 @@ public class ProgramacionAdminFragment extends Fragment {
 
         Button btnAceptar = view.findViewById(R.id.btn_aceptar);
 
-
+        lvProgramacion = view.findViewById(R.id.lv_programacion);
         edtTitulo = view.findViewById(R.id.edt_titulo);
 
         ArrayAdapter adapterDia = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,listDias);
@@ -185,8 +186,14 @@ public class ProgramacionAdminFragment extends Fragment {
                         ,diaSelect, horaSelect, edtTitulo.getText().toString());
                 executeProgramacion.execute();
 
+                ExecuteGetProgramacion executeGetProgramacion2 = new ExecuteGetProgramacion();
+                executeGetProgramacion2.execute();
+
             }
         });
+
+        ExecuteGetProgramacion executeGetProgramacion = new ExecuteGetProgramacion();
+        executeGetProgramacion.execute();
 
         initTextBoxes(view);
 
@@ -289,7 +296,26 @@ public class ProgramacionAdminFragment extends Fragment {
 
         llenarTextBoxex();
     }
+    private void cargarProgramaciones(JSONObject jsonResult){
+        try {
+            ProgramacionFragment.listaProgramacion.clear();
 
+            JSONArray jsonProgramacion = jsonResult.getJSONArray("programacion");
+            //for(int i = 0; i < jsonTendencias.length(); i++) {
+            for(int i = 0; i < 10; i++) {
+                if(jsonProgramacion.length() > 0){
+                    JSONObject prog = (JSONObject) jsonProgramacion.get(i);
+                    ProgramacionFragment.listaProgramacion.add(new Programacion(prog.getString("dia"), prog.getString("hora"), prog.getString("titulo")));
+                }else{
+                    ProgramacionFragment.listaProgramacion.add(new Programacion("", "", ""));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //ordenarProgramacion();
+        lvProgramacion.setAdapter(new ProgramacionAdapter());
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////
     public class ExecuteAddTrending extends AsyncTask<String, Void, String> {
         boolean isOk = false;
@@ -403,5 +429,95 @@ public class ProgramacionAdminFragment extends Fragment {
         }
 
 
+    }
+    public class ProgramacionAdapter extends BaseAdapter {
+
+        public ProgramacionAdapter() {
+            super();
+        }
+
+        @Override
+        public int getCount() {
+            return ProgramacionFragment.listaProgramacion.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return ProgramacionFragment.listaProgramacion.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            LayoutInflater inflater = getLayoutInflater();
+            if (view == null) {
+                view = inflater.inflate(R.layout.custom_programacion_list_item, null);
+            }
+
+
+            TextView txtProgTitulo = view.findViewById(R.id.txtTituloProgramacion);
+            TextView txtProgDiaHora = view.findViewById(R.id.txtDiaHora);
+
+
+
+            Programacion prog = ProgramacionFragment.listaProgramacion.get(i);
+
+            txtProgTitulo.setText(prog.getTitulo());
+            String diaHora = prog.getDia() + ": " + prog.getHora();
+            txtProgDiaHora.setText(diaHora);
+            return view;
+        }
+    }
+
+    public class ExecuteGetProgramacion extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+
+        public ExecuteGetProgramacion() {
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.getProgramacion(user.getId(), user.getAuth_token(), Streaming.getIdEmisora());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(isOk){
+                String token = null;
+                try {
+                    JSONObject result = API_Access.getInstance().getJsonObjectResponse();
+                    token = (result).getString("authentication_token");
+                    Usuario_Singleton.getInstance().setAuth_token(token);
+                    LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+
+                    cargarProgramaciones(result);
+
+                    Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else{
+                Toast.makeText(getActivity(), "Lista no obtenida", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

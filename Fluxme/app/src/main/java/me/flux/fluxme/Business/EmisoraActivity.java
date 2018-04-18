@@ -129,6 +129,13 @@ public class EmisoraActivity extends BaseActivity {
                             fragmentTransaction.replace(R.id.contenedor, programacionAdminFragment);
                             fragmentTransaction.commit();
                         }
+                        else{
+                            ProgramacionFragment programacionFragment = new ProgramacionFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, programacionFragment);
+                            fragmentTransaction.commit();
+                        }
                         break;
                     case 5:
                         if (Usuario_Singleton.getInstance().isAdmin()){
