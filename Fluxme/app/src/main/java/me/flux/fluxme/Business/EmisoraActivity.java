@@ -88,12 +88,19 @@ public class EmisoraActivity extends BaseActivity {
                         }
                         break;
                     case 1:
-                        /*
-                        fr2 fragmento2 = new fr2();
+                        //CHAT
+                        break;
+                    case 2:
+                        if(Usuario_Singleton.getInstance().isAdmin()) {
+                            //ESTADISTICAS
+                        }else{
+                            VotacionesUserFragment votacionesUserFragment = new VotacionesUserFragment();
 
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.contenedor,fragmento2);
-                        fragmentTransaction.commit();*/
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, votacionesUserFragment);
+                            fragmentTransaction.commit();
+                        }
+
                         break;
                     case 3:
                         if (Usuario_Singleton.getInstance().isAdmin()){

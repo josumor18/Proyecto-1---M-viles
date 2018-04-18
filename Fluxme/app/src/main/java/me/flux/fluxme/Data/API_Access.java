@@ -205,8 +205,19 @@ public class API_Access {
 
     public boolean getMisVotos(String id, String auth_token, String id_emisora){
         jsonArrayResponse = new JSONArray();
-        String urlEsp = "votaciones/get_votos?id_user=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
+        String urlEsp = "votaciones/get_mis_votos?id=" + id + "&id_user=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean addVoto(String id_user, String auth_token, String id_emisora, String id_cancion, String nom_cancion){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_user", id_user);
+        Parametros.put("authentication_token", auth_token);
+        Parametros.put("id_emisora", id_emisora);
+        Parametros.put("id_cancion", id_cancion);
+        Parametros.put("nom_cancion", nom_cancion);
+        return makePOSTRequest("votaciones/add_voto", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
     public boolean addCancion(String id_user, String auth_token, String id_emisora, String cancion){
