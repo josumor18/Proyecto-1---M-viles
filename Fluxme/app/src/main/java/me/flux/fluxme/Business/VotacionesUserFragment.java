@@ -7,10 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,14 +25,15 @@ import me.flux.fluxme.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VotacionesAdminFragment extends Fragment {
+public class VotacionesUserFragment extends Fragment {
 
-    ListView lvCancVotarAdmin;
-    Button btnAddSongVot;
-    EditText edtxtCancionArtista;
     ArrayList<Cancion> canciones = new ArrayList<Cancion>();
+    ArrayList<Cancion> votadas = new ArrayList<Cancion>();
+    ArrayList<Boolean> seleccionadas = new ArrayList<Boolean>();
 
-    public VotacionesAdminFragment() {
+    ListView lvVotaciones;
+
+    public VotacionesUserFragment() {
         // Required empty public constructor
     }
 
@@ -44,22 +42,9 @@ public class VotacionesAdminFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_votaciones_admin, container, false);
-        lvCancVotarAdmin = view.findViewById(R.id.lvCancVotarAdmin);
-        edtxtCancionArtista = view.findViewById(R.id.edtxtCancionArtista);
-        btnAddSongVot = view.findViewById(R.id.btnAddSongVot);
-        btnAddSongVot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!(edtxtCancionArtista.getText().toString().isEmpty())){
-                    ExecuteAddCancion executeAddCancion = new ExecuteAddCancion();
-                    executeAddCancion.execute(edtxtCancionArtista.getText().toString());
-                }else{
-                    Toast.makeText(getActivity(), "Falta nombre de canción", Toast.LENGTH_SHORT).show();
-                }
+        View view = inflater.inflate(R.layout.fragment_votaciones_user, container, false);
 
-            }
-        });
+        lvVotaciones = view.findViewById(R.id.lvVotaciones);
 
         ExecuteGetCanciones executeGetCanciones = new ExecuteGetCanciones();
         executeGetCanciones.execute();
@@ -67,7 +52,7 @@ public class VotacionesAdminFragment extends Fragment {
         return view;
     }
 
-    private void cargarCanciones(JSONObject result){
+    private void cargarArrayCanciones(JSONObject result){
         try {
             canciones.clear();
             String token = result.getString("authentication_token");
@@ -82,7 +67,41 @@ public class VotacionesAdminFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        lvCancVotarAdmin.setAdapter(new CancionesAdapter());
+        ExecuteGetVotos executeGetVotos = new ExecuteGetVotos();
+        executeGetVotos.execute();
+    }
+
+    private void cargarListViewCanciones(JSONObject result){
+        try {
+            String token = result.getString("authentication_token");
+            Usuario_Singleton.getInstance().setAuth_token(token);
+            LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+            JSONArray jsonEmisoras = result.getJSONArray("ubicaciones");
+            for(int i = 0; i < jsonEmisoras.length(); i++) {
+                JSONObject cancion = (JSONObject) jsonEmisoras.get(i);
+                Cancion nCan = new Cancion(cancion.getInt("id"),cancion.getString("id_cancion"));
+                votadas.add(nCan);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        colocarSeleccionadas();
+        lvVotaciones.setAdapter(new CancionesAdapter());
+    }
+
+    private void colocarSeleccionadas(){
+        for(int i = 0; i < canciones.size(); i++){
+            boolean col = false;
+            for(Cancion v:votadas){
+                if(canciones.get(i).id == v.id){
+                    seleccionadas.add(true);
+                    col = true;
+                }
+            }
+            if(!col){
+                seleccionadas.add(false);
+            }
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,22 +130,30 @@ public class VotacionesAdminFragment extends Fragment {
         public View getView(int i, View view, ViewGroup viewGroup) {
             LayoutInflater inflater = getLayoutInflater();
             if (view == null) {
-                view = inflater.inflate(R.layout.custom_simple_list_item, null);
+                view = inflater.inflate(R.layout.custom_votar_list_item, null);
             }
 
             TextView txtTitulo = view.findViewById(R.id.txtVotarNomCancion);
-            /*ImageView imgEequis = view.findViewById(R.id.ivOpcionDerecha);
+            ImageView imgEequis = view.findViewById(R.id.ivOpcionDerecha);
             final int pos = i;
             imgEequis.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExecuteDeleteCancion executeDeleteCancion = new ExecuteDeleteCancion();
-                    executeDeleteCancion.execute(Integer.toString(canciones.get(pos).id));
+                    if(!seleccionadas.get(pos)){
+                        ExecuteAddVoto executeAddVoto = new ExecuteAddVoto(Integer.toString(canciones.get(pos).id), canciones.get(pos).cancion);
+                        executeAddVoto.execute();
+                    }
+
                 }
-            });*/
+            });
 
             txtTitulo.setText(canciones.get(i).cancion);
-            //imgEequis.setImageResource(R.drawable.equis);//BackgroundResource(R.drawable.equis);
+            if(seleccionadas.get(i)){
+                imgEequis.setImageResource(R.drawable.tab_votar_verde);
+            }else{
+                imgEequis.setImageResource(R.drawable.tab_votar_des);
+            }
+
             return view;
         }
     }
@@ -157,7 +184,7 @@ public class VotacionesAdminFragment extends Fragment {
             super.onPostExecute(s);
 
             if(isOk){
-                cargarCanciones(API_Access.getInstance().getJsonObjectResponse());
+                cargarArrayCanciones(API_Access.getInstance().getJsonObjectResponse());
             }else{
                 String mensaje = "Error al obtener las canciones";
 
@@ -168,7 +195,7 @@ public class VotacionesAdminFragment extends Fragment {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    public class ExecuteAddCancion extends AsyncTask<String, Void, String> {
+    public class ExecuteGetVotos extends AsyncTask<String, Void, String> {
         boolean isOk = false;
 
         @Override
@@ -183,9 +210,9 @@ public class VotacionesAdminFragment extends Fragment {
         protected String doInBackground(String... strings) {
             API_Access api = API_Access.getInstance();
             Usuario_Singleton user = Usuario_Singleton.getInstance();
-            isOk = api.addCancion(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), strings[0]);
+            isOk = api.getMisVotos(user.getId(), user.getAuth_token(), Streaming.getIdEmisora());
 
-            return strings[0];
+            return null;
         }
 
         @Override
@@ -193,11 +220,49 @@ public class VotacionesAdminFragment extends Fragment {
             super.onPostExecute(s);
 
             if(isOk){
-                edtxtCancionArtista.setText("");
-                lvCancVotarAdmin.setAdapter(new CancionesAdapter());
+                cargarListViewCanciones(API_Access.getInstance().getJsonObjectResponse());
+            }else{
+                String mensaje = "Error al obtener las canciones";
 
-                cargarCanciones(API_Access.getInstance().getJsonObjectResponse());
+                Toast.makeText(getActivity(), mensaje, Toast.LENGTH_SHORT).show();
+            }
+            //rlLoaderEmisoras.setVisibility(View.INVISIBLE);
+        }
+    }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public class ExecuteAddVoto extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+        String id_cancion;
+        String nom_cancion;
+
+        public ExecuteAddVoto(String id_cancion, String nom_cancion) {
+            this.id_cancion = id_cancion;
+            this.nom_cancion = nom_cancion;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //rlLoaderEmisoras.setVisibility(View.VISIBLE);
+            //rlLogin.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            Usuario_Singleton user = Usuario_Singleton.getInstance();
+            isOk = api.addVoto(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), id_cancion, nom_cancion);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if(isOk){
                 String token = null;
                 try {
                     token = API_Access.getInstance().getJsonObjectResponse().getString("authentication_token");
@@ -206,15 +271,16 @@ public class VotacionesAdminFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                ExecuteGetCanciones executeGetCanciones = new ExecuteGetCanciones();
+                executeGetCanciones.execute();
             }else{
-                String mensaje = "Error al agregar canción";
+                String mensaje = "Error al obtener las canciones";
 
                 Toast.makeText(getActivity(), mensaje, Toast.LENGTH_SHORT).show();
             }
+            //rlLoaderEmisoras.setVisibility(View.INVISIBLE);
         }
     }
-
 
     //////////////////////////////////////7
     private class Cancion{
@@ -226,5 +292,4 @@ public class VotacionesAdminFragment extends Fragment {
             this.cancion = cancion;
         }
     }
-
 }
