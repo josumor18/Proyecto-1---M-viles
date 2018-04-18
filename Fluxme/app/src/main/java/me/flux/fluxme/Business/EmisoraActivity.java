@@ -119,6 +119,15 @@ public class EmisoraActivity extends BaseActivity {
                             fragmentTransaction.commit();
                         }
                         break;
+                    case 5:
+                        if (Usuario_Singleton.getInstance().isAdmin()){
+                            VotacionesAdminFragment votacionesAdminFragment = new VotacionesAdminFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, votacionesAdminFragment);
+                            fragmentTransaction.commit();
+                        }
+                        break;
                 }
                 cambiarIconoSeleccionado(tab.getPosition());
             }
@@ -154,11 +163,24 @@ public class EmisoraActivity extends BaseActivity {
                 }
             }
         }
+        if(admin){
+            tabLayout.addTab(tabLayout.newTab().setText("Votaciones"));
+            tabLayout.getTabAt(5).setIcon(R.drawable.tab_votar_des);
+        }else{
+            if(tabLayout.getTabCount() == 6){
+                tabLayout.removeTabAt(5);
+            }
+        }
     }
 
     private void cambiarIconoSeleccionado(int pos){
         if(Usuario_Singleton.getInstance().isAdmin()){
-            tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Sel[pos]);
+            if(pos == 5){
+                tabLayout.getTabAt(pos).setIcon(R.drawable.tab_votar_sel);
+            }else{
+                tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Sel[pos]);
+            }
+
         }else{
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Sel[pos]);
         }
@@ -166,7 +188,12 @@ public class EmisoraActivity extends BaseActivity {
 
     private void cambiarIconoDeseleccionado(int pos) {
         if (Usuario_Singleton.getInstance().isAdmin()) {
-            tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Des[pos]);
+            if(pos == 5){
+                tabLayout.getTabAt(pos).setIcon(R.drawable.tab_votar_des);
+            }else{
+                tabLayout.getTabAt(pos).setIcon(tabIconsAdmin_Des[pos]);
+            }
+
         } else {
             tabLayout.getTabAt(pos).setIcon(tabIconsUser_Des[pos]);
         }

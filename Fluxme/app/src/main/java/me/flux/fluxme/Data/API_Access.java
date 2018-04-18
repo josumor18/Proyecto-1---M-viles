@@ -186,6 +186,34 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getCancionesVotos(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "votaciones/get_canciones?id_user=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getMisVotos(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "votaciones/get_votos?id_user=" + id + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean addCancion(String id_user, String auth_token, String id_emisora, String cancion){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("id_user", id_user);
+        Parametros.put("authentication_token", auth_token);
+        Parametros.put("id_emisora", id_emisora);
+        Parametros.put("cancion", cancion);
+        return makePOSTRequest("votaciones/add_cancion", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean deleteCancion(String id_user, String auth_token, String id_emisora, String id_cancion){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "ubicaciones/del_ubicacion?id_user=" + id_user + "&authentication_token=" + auth_token + "&id_emisora=" + id_emisora + "&id_cancion=" + id_cancion;
+        return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
+    }
+
     /////////////////////// GET Respuesta del servidor: JSONObject ////////////////////////////////
     public JSONObject getJsonObjectResponse(){
         Log.d("estado: ", ""+estadoRequest);
@@ -347,8 +375,9 @@ public class API_Access {
             httpsURLConnection.connect();
             int r = httpsURLConnection.getResponseCode();
             String rC = Integer.toString(httpsURLConnection.getResponseCode());
-            if(r==200)
+            if(r==200){
                 return true;
+            }
         } catch (IOException exception) {
             exception.printStackTrace();
         }
