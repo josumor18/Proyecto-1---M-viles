@@ -65,7 +65,8 @@
                         <Spinner
                             android:id="@+id/sp_dia"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:popupBackground="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/textView8"
@@ -77,23 +78,17 @@
                         <Spinner
                             android:id="@+id/sp_horas"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-
-                        <TextView
-                            android:id="@+id/textView11"
-                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Titulo:" />
+                            android:popupBackground="@color/colorPrimary" />
+
 
                         <EditText
                             android:id="@+id/edt_titulo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textPersonName"
-                            android:text="Name" />
+                            android:hint="Titulo"
+                            android:inputType="textPersonName" />
 
                         <Button
                             android:id="@+id/btn_aceptar"
@@ -107,12 +102,6 @@
                             android:layout_height="match_parent" >
 
                         </ListView>
-
-                        <Button
-                            android:id="@+id/btn_guardarCambios"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Button" />
 
                     </LinearLayout>
                 </ScrollView>

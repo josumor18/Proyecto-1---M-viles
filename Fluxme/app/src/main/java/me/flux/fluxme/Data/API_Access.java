@@ -71,7 +71,18 @@ public class API_Access {
         return makePOSTRequest("users/register", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
 
     }
+    public boolean setProgramacion(String id_user,String authToken,String idEmisora,String dia,String hora,String titulo){
+        jsonObjectResponse = new JSONObject();
+        HashMap<String, String> Parametros = new HashMap<String, String>();
+        Parametros.put("idUser", id_user);
+        Parametros.put("idEmisora", idEmisora);
+        Parametros.put("authentication_token",authToken);
+        Parametros.put("dia", dia);
+        Parametros.put("hora", hora);
+        Parametros.put("titulo", titulo);
+        return makePOSTRequest("programacions/setProgramacion", "POST", true, true, Parametros, HttpsURLConnection.HTTP_CREATED);
 
+    }
 
     public boolean setSuscription(String idUser, String idEmisora,String authToken){
         jsonObjectResponse = new JSONObject();

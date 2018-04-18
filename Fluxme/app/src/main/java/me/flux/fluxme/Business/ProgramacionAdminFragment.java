@@ -51,6 +51,21 @@ public class ProgramacionAdminFragment extends Fragment {
     RadioGroup rgrp_Opcion;
 
     String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
+    String[] listHoras = {"0:00 - 1:00","1:00 - 2:00","2:00 - 3:00", "3:00 - 4:00", "4:00 - 5:00",
+                            "5:00 - 6:00","6:00 - 7:00","7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00",
+                            "10:00 - 11:00","11:00 - 12:00","12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00",
+                            "15:00 - 16:00","16:00 - 17:00","17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
+                            "20:00 - 21:00","21:00 - 22:00","22:00 - 23:00", "23:00 - 23:00", "23:00 - 24:00"};
+
+    String diaSelect = listDias[0];
+    String horaSelect = listHoras [0];
+
+    Streaming streaming;
+    Usuario_Singleton user;
+    Spinner spDia;
+    Spinner spHora;
+    EditText edtTitulo;
+
     private RadioGroup.OnCheckedChangeListener checkedChangeListener = new RadioGroup.OnCheckedChangeListener(){
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -80,22 +95,38 @@ public class ProgramacionAdminFragment extends Fragment {
         rlProgSemAdmin = view.findViewById(R.id.rlProgSemAdmin);
         rlTendAdmin = view.findViewById(R.id.rlTendAdmin);
 
-        Spinner spDia = view.findViewById(R.id.sp_dia);
+        streaming = Streaming.getInstance();
+        user = Usuario_Singleton.getInstance();
+
+        spDia = view.findViewById(R.id.sp_dia);
+        spHora = view.findViewById(R.id.sp_horas);
+
+        Button btnAceptar = view.findViewById(R.id.btn_aceptar);
 
 
-        ArrayAdapter aa = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,listDias);
+        edtTitulo = view.findViewById(R.id.edt_titulo);
 
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter adapterDia = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,listDias);
+        ArrayAdapter adapterHora = new ArrayAdapter(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,listHoras);
+
+        adapterDia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
-        spDia.setAdapter(aa);
+        spDia.setAdapter(adapterDia);
+
+        adapterHora.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        spHora.setAdapter(adapterHora);
 
         spDia.setSelection(0, true);
         View vi = spDia.getSelectedView();
         ((TextView)vi).setTextColor(getResources().getColor(R.color.colorPrimary));
 
-        TextView spinnerText = (TextView) spDia.getChildAt(0);
+        spHora.setSelection(0, true);
+        View vi2 = spHora.getSelectedView();
+        ((TextView)vi2).setTextColor(getResources().getColor(R.color.colorPrimary));
+        /*TextView spinnerText = (TextView) spDia.getChildAt(0);
 
-        spinnerText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        spinnerText.setTextColor(getResources().getColor(R.color.colorPrimary));*/
         //Set the listener for when each option is clicked.
         spDia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
@@ -105,6 +136,27 @@ public class ProgramacionAdminFragment extends Fragment {
             {
                 //Change the selected item's text color
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
+                diaSelect = listDias[spDia.getSelectedItemPosition()];
+                Toast.makeText(getActivity(), diaSelect, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+            }
+        });
+
+        spHora.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                //Change the selected item's text color
+                ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
+                horaSelect = listHoras[spHora.getSelectedItemPosition()];
+                Toast.makeText(getActivity(), horaSelect, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -125,6 +177,16 @@ public class ProgramacionAdminFragment extends Fragment {
         rbTendencias = view.findViewById(R.id.rbTendencias);
         rgrp_Opcion = view.findViewById(R.id.rgrp_Opcion);
         rgrp_Opcion.setOnCheckedChangeListener(checkedChangeListener);
+
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ExecuteProgramacion executeProgramacion = new ExecuteProgramacion(user.getId(),user.getAuth_token(),streaming.getIdEmisora()
+                        ,diaSelect, horaSelect, edtTitulo.getText().toString());
+                executeProgramacion.execute();
+
+            }
+        });
 
         initTextBoxes(view);
 
@@ -287,5 +349,59 @@ public class ProgramacionAdminFragment extends Fragment {
 
             }
         }
+    }
+
+    public class ExecuteProgramacion extends AsyncTask<String,Void,String> {
+        private String idEmisora;
+        private String id_user;
+        private String authToken;
+        private String dia;
+        private String hora;
+        private String titulo;
+
+        private boolean isDone = false;
+
+        public ExecuteProgramacion(String id_user,String authToken,String idEmisora,String dia, String hora, String titulo){
+            this.dia = dia;
+            this.hora = hora;
+            this.idEmisora=idEmisora;
+            this.id_user=id_user;
+            this.authToken=authToken;
+            this.titulo = titulo;
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+
+            API_Access api = API_Access.getInstance();
+            isDone = api.setProgramacion(id_user,authToken,idEmisora,dia,hora,titulo);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(isDone) {
+                String token = null;
+                try {
+                    token = (API_Access.getInstance().getJsonObjectResponse()).getString("authentication_token");
+                    Usuario_Singleton.getInstance().setAuth_token(token);
+                    LoginActivity.actualizarAuth_Token(token, getActivity().getApplicationContext());
+                    //Si es Activity
+                    //LoginActivity.actualizarAuth_Token(token, this);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Toast.makeText(getActivity().getApplicationContext(), "Programacion agregada", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+
+
     }
 }
