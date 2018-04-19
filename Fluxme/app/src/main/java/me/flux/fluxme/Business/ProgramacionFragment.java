@@ -52,7 +52,7 @@ public class ProgramacionFragment extends Fragment {
 
             JSONArray jsonProgramacion = jsonResult.getJSONArray("programacion");
             //for(int i = 0; i < jsonTendencias.length(); i++) {
-            for(int i = 0; i < 10; i++) {
+            for(int i = 0; i < jsonProgramacion.length(); i++) {
                 if(jsonProgramacion.length() > 0){
                     JSONObject prog = (JSONObject) jsonProgramacion.get(i);
                     listaProgramacion.add(new Programacion(prog.getString("dia"), prog.getString("hora"), prog.getString("titulo")));
@@ -63,23 +63,23 @@ public class ProgramacionFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //ordenarProgramacion();
+        ordenarProgramacion();
         lvProgramacion.setAdapter(new ProgramacionAdapter());
     }
 
-    /*private void ordenarProgramacion(){
+    private void ordenarProgramacion(){
         ArrayList<Programacion> progAux = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 10;j++) {
-                if (listaProgramacion.get(j).getPosicion() == i + 1) {
-                    progAux.add(listaProgramacion.get(j));
-                    continue;
+        for(String d:ProgramacionAdminFragment.listDias){
+            for(String h:ProgramacionAdminFragment.listHoras){
+                for(Programacion p: listaProgramacion){
+                    if(p.getDia().equals(d)&&p.getHora().equals(h))
+                        progAux.add(p);
                 }
             }
         }
         listaProgramacion.clear();
         listaProgramacion = progAux;
-    }*/
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     public class ProgramacionAdapter extends BaseAdapter {
@@ -161,15 +161,13 @@ public class ProgramacionFragment extends Fragment {
 
                     cargarProgramaciones(result);
 
-                    Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
-            else{
-                Toast.makeText(getActivity(), "Lista no obtenida", Toast.LENGTH_SHORT).show();
-            }
+
         }
     }
 

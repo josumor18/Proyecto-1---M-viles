@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private static String token = "";
     private static String foto = "";
 
+    public static boolean isFacebook=false;
     RelativeLayout rlLogin, rlLoader;
     ProgressBar progressBarLogin;
     EditText edtUsernameLogin;
@@ -342,9 +343,11 @@ public class LoginActivity extends AppCompatActivity {
             }else if(tipoAutenticacion == 1){
                 //login con facebook
                 isLogged = api.login_facebook(name, email, auth_token);
+                isFacebook = true;
             }else if (tipoAutenticacion == 0){
                 //login con los campos del formulario (email, password)
                 isLogged = api.login(email, password);
+                isFacebook = false;
             }
 
 
