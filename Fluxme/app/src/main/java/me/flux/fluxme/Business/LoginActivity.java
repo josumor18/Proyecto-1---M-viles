@@ -215,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        Intent intent = new Intent(getApplicationContext(), EmisorasFavoritasActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
         startActivity(intent);
         finish();
     }

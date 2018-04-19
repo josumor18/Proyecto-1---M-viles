@@ -174,11 +174,11 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 }
                 return true;
-            case R.id.item_inicio:
+            /*case R.id.item_inicio:
                 isChanging = true;
-                Intent intentInicio = new Intent(getApplicationContext(), EmisorasFavoritasActivity.class);
-                startActivity(intentInicio);
-                return true;
+                Intent intentEmisoras = new Intent(getApplicationContext(), ListaEmisorasActivity.class);
+                startActivity(intentEmisoras);
+                return true;*/
             case R.id.item_perfil:
                 isChanging = true;
                 Intent intentPerfil = new Intent(getApplicationContext(), PerfilActivity.class);

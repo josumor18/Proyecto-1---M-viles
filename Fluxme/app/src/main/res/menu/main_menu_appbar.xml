@@ -17,10 +17,6 @@
         android:title="Play"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/item_inicio"
-        android:title="Inicio"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/item_perfil"
