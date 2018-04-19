@@ -213,7 +213,9 @@ public class LoginActivity extends AppCompatActivity {
         streaming.setAudioManager((AudioManager)getSystemService(Context.AUDIO_SERVICE));
         streaming.initMediaPlayer();
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+        //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), EmisorasFavoritasActivity.class);
         startActivity(intent);
         finish();
     }

@@ -74,10 +74,15 @@ public class ListaEmisorasActivity extends BaseActivity {
         if(seleccionada.getId_admin() == Integer.parseInt(Usuario_Singleton.getInstance().getId())){
             admin = true;
         }else{
-            obtenerUbicacion();
+            try {
+                if(obtenerUbicacion()){
+                    ExecuteAddLocations loc = new ExecuteAddLocations();
+                    loc.execute();
+                }
 
-            ExecuteAddLocations loc = new ExecuteAddLocations();
-            loc.execute();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         Usuario_Singleton.getInstance().setAdmin(admin);
 

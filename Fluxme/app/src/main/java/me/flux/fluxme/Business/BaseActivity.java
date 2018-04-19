@@ -176,6 +176,8 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.item_inicio:
                 isChanging = true;
+                Intent intentInicio = new Intent(getApplicationContext(), EmisorasFavoritasActivity.class);
+                startActivity(intentInicio);
                 return true;
             case R.id.item_perfil:
                 isChanging = true;
@@ -223,7 +225,7 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name);
     }
 
-    protected void obtenerUbicacion(){
+    protected boolean obtenerUbicacion(){
         try{
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -243,12 +245,16 @@ public class BaseActivity extends AppCompatActivity {
                 longitud = lastLocation.getLongitude();
                 latitud = lastLocation.getLatitude();
                 getCiudadPais();
+                if(location != null){
+                    return true;
+                }
 
             }
 
         }catch (Exception e){
             Toast.makeText(this, "No se pudo obtener la ubicación", Toast.LENGTH_SHORT).show();
         }
+        return false;
     }
 
     private void getCiudadPais(){
