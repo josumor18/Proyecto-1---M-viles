@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -26,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONException;
 
+import java.util.List;
+
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
 
@@ -39,6 +43,8 @@ public class BaseActivity extends AppCompatActivity {
 
     protected Double longitud;
     protected Double latitud;
+    protected String ciudad;
+    protected String pais;
     protected LocationManager locationManager;
     protected LocationListener locationListener;
 
@@ -236,6 +242,7 @@ public class BaseActivity extends AppCompatActivity {
                 LatLng location = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
                 longitud = lastLocation.getLongitude();
                 latitud = lastLocation.getLatitude();
+                getCiudadPais();
 
             }
 
@@ -244,6 +251,30 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    private void getCiudadPais(){
+        // Elemento geocoder en el contexto
+        Geocoder geocoder = new Geocoder(getApplicationContext());
+        // Elemento list que contendra la direccion
+        List<Address> direcciones = null;
+
+        // Funcion para obtener coger el nombre desde el geocoder
+        try {
+            direcciones = geocoder.getFromLocation(latitud, longitud,1);
+        } catch (Exception e) {
+            Log.d("Error", "Error en geocoder:"+e.toString());
+        }
+
+        // Funcion que determina si se obtuvo resultado o no
+        if(direcciones != null && direcciones.size() > 0 ){
+
+            // Creamos el objeto address
+            Address direccion = direcciones.get(0);
+
+            // Creamos el string a partir del elemento direccion
+            ciudad = direccion.getLocality();
+            pais = direccion.getCountryName();
+        }
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     public class ExecuteAddLocations extends AsyncTask<String, Void, String> {
@@ -259,7 +290,7 @@ public class BaseActivity extends AppCompatActivity {
             API_Access api = API_Access.getInstance();
             Usuario_Singleton user = Usuario_Singleton.getInstance();
 
-            isOk = api.addLocation(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), Double.toString(longitud), Double.toString(latitud));
+            isOk = api.addLocation(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), Double.toString(longitud), Double.toString(latitud), ciudad, pais);
 
             return null;
         }

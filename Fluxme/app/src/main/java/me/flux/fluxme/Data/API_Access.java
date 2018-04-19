@@ -164,7 +164,7 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
-    public boolean addLocation(String id_user, String auth_token, String id_emisora, String longitud, String latitud){
+    public boolean addLocation(String id_user, String auth_token, String id_emisora, String longitud, String latitud, String ciudad, String pais){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("id_user", id_user);
@@ -172,6 +172,8 @@ public class API_Access {
         Parametros.put("id_emisora", id_emisora);
         Parametros.put("longitud", longitud);
         Parametros.put("latitud", latitud);
+        Parametros.put("ciudad", ciudad);
+        Parametros.put("pais", pais);
         return makePOSTRequest("ubicaciones/add", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
