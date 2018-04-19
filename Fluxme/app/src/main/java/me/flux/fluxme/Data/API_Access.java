@@ -256,6 +256,18 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
+    public boolean getUbicacionesByEmisoraID(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "estadisticas/get_ubicaciones?idUser=" + id + "&authentication_token=" + auth_token + "&emisora_id=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
+    public boolean getVotosByEmisoraID(String id, String auth_token, String id_emisora){
+        jsonArrayResponse = new JSONArray();
+        String urlEsp = "estadisticas/get_votaciones?idUser=" + id + "&authentication_token=" + auth_token + "&emisora_id=" + id_emisora;
+        return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
+    }
+
     public boolean postComment(String id_user, String auth_token, String id_emisora, String user_name, String comment){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();

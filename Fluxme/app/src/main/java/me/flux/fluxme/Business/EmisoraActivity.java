@@ -101,7 +101,11 @@ public class EmisoraActivity extends BaseActivity {
                         break;
                     case 2:
                         if(Usuario_Singleton.getInstance().isAdmin()) {
-                            //ESTADISTICAS
+                            EstadisticasFragment estadisticasFragment = new EstadisticasFragment();
+
+                            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.contenedor, estadisticasFragment);
+                            fragmentTransaction.commit();
                         }else{
                             VotacionesUserFragment votacionesUserFragment = new VotacionesUserFragment();
 
