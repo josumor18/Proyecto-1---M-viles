@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class PerfilActivity extends BaseActivity {
     EditText edtNuevaCon;
     EditText edtConfirmCon;
     ImageView perfilImageView;
+    Button btnGuardar;
 
 
     @Override
@@ -42,7 +44,7 @@ public class PerfilActivity extends BaseActivity {
 
         user = Usuario_Singleton.getInstance();
 
-        //Falta foto
+        btnGuardar = findViewById(R.id.btn_guardarPerfil);
 
         edtNombre = findViewById(R.id.PerfilNombreEditText);
         edtNombre.setText(user.getNombre());
@@ -53,6 +55,10 @@ public class PerfilActivity extends BaseActivity {
         edtContrasena = findViewById(R.id.PerfilContrasenaEditText);
         edtNuevaCon = findViewById(R.id.PerfilNuevaContrasenaEditText);
         edtConfirmCon = findViewById(R.id.PerfilConfirmConEditText);
+
+        if(LoginActivity.isFacebook){
+
+        }
 
         perfilImageView = findViewById(R.id.perfilImageView);
         if(!(user.getFoto().isEmpty())){
@@ -67,6 +73,12 @@ public class PerfilActivity extends BaseActivity {
             }
 
             perfilImageView.setImageBitmap(coverImage);
+            edtNombre.setEnabled(false);
+            edtCorreo.setEnabled(false);
+            edtContrasena.setEnabled(false);
+            edtNuevaCon.setEnabled(false);
+            edtConfirmCon.setEnabled(false);
+            btnGuardar.setEnabled(false);
         }
     }
 

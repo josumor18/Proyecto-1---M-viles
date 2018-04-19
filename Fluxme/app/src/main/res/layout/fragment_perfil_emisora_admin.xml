@@ -11,17 +11,17 @@
         <RelativeLayout
             android:id="@+id/rlPerfilEmisora"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/rlImage"
                 android:layout_width="match_parent"
-                android:layout_height="190dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/imgLogoFluxme"
-                    android:layout_width="200dp"
-                    android:layout_height="150dp"
+                    android:layout_width="150dp"
+                    android:layout_height="125dp"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
@@ -31,9 +31,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="187dp"
+                android:layout_marginTop="155dp"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -44,7 +45,7 @@
                     android:text="Prueba"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="38sp"
+                    android:textSize="28sp"
                     android:textStyle="bold" />
 
 
@@ -53,23 +54,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Descripcion:"
-                    android:textSize="28sp" />
+                    android:textSize="24sp" />
 
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
+                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/edtDescripcion"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:inputType="textMultiLine"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:paddingTop="20dp"
                         android:text="Prueba"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/cardview_dark_background"
+                        android:textColor="@color/com_facebook_button_background_color_focused_disabled"
                         android:textSize="20sp"
+                        android:textStyle="italic"
                         android:visibility="visible" />
                 </ScrollView>
 
@@ -77,7 +80,7 @@
                     android:id="@+id/btn_guardarCambios"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Guardar Cambios" />
 
 

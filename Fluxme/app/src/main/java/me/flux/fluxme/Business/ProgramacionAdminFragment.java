@@ -4,6 +4,7 @@ package me.flux.fluxme.Business;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,8 +51,8 @@ public class ProgramacionAdminFragment extends Fragment {
     RadioButton rbTendencias;
     RadioGroup rgrp_Opcion;
 
-    String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
-    String[] listHoras = {"0:00 - 1:00","1:00 - 2:00","2:00 - 3:00", "3:00 - 4:00", "4:00 - 5:00",
+    public static String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
+    public static String[] listHoras = {"0:00 - 1:00","1:00 - 2:00","2:00 - 3:00", "3:00 - 4:00", "4:00 - 5:00",
                             "5:00 - 6:00","6:00 - 7:00","7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00",
                             "10:00 - 11:00","11:00 - 12:00","12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00",
                             "15:00 - 16:00","16:00 - 17:00","17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
@@ -129,6 +130,7 @@ public class ProgramacionAdminFragment extends Fragment {
 
         spinnerText.setTextColor(getResources().getColor(R.color.colorPrimary));*/
         //Set the listener for when each option is clicked.
+
         spDia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
 
@@ -138,7 +140,7 @@ public class ProgramacionAdminFragment extends Fragment {
                 //Change the selected item's text color
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
                 diaSelect = listDias[spDia.getSelectedItemPosition()];
-                Toast.makeText(getActivity(), diaSelect, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), diaSelect, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -157,7 +159,7 @@ public class ProgramacionAdminFragment extends Fragment {
                 //Change the selected item's text color
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
                 horaSelect = listHoras[spHora.getSelectedItemPosition()];
-                Toast.makeText(getActivity(), horaSelect, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), horaSelect, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -179,21 +181,25 @@ public class ProgramacionAdminFragment extends Fragment {
         rgrp_Opcion = view.findViewById(R.id.rgrp_Opcion);
         rgrp_Opcion.setOnCheckedChangeListener(checkedChangeListener);
 
+        ExecuteGetProgramacion executeGetProgramacion = new ExecuteGetProgramacion();
+        executeGetProgramacion.execute();
+
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ExecuteProgramacion executeProgramacion = new ExecuteProgramacion(user.getId(),user.getAuth_token(),streaming.getIdEmisora()
-                        ,diaSelect, horaSelect, edtTitulo.getText().toString());
-                executeProgramacion.execute();
+
+                if(!TextUtils.isEmpty(edtTitulo.getText()))
+                {
+                    ExecuteProgramacion executeProgramacion = new ExecuteProgramacion(user.getId(),user.getAuth_token(),streaming.getIdEmisora()
+                            ,diaSelect, horaSelect, edtTitulo.getText().toString());
+                    executeProgramacion.execute();
+                }
 
                 ExecuteGetProgramacion executeGetProgramacion2 = new ExecuteGetProgramacion();
                 executeGetProgramacion2.execute();
-
             }
         });
 
-        ExecuteGetProgramacion executeGetProgramacion = new ExecuteGetProgramacion();
-        executeGetProgramacion.execute();
 
         initTextBoxes(view);
 
@@ -271,6 +277,20 @@ public class ProgramacionAdminFragment extends Fragment {
        }
    }
 
+    private void ordenarProgramacion(){
+        ArrayList<Programacion> progAux = new ArrayList<>();
+        for(String d:listDias){
+            for(String h:listHoras){
+                for(Programacion p: ProgramacionFragment.listaProgramacion){
+                    if(p.getDia().equals(d)&&p.getHora().equals(h))
+                        progAux.add(p);
+                }
+            }
+        }
+        ProgramacionFragment.listaProgramacion.clear();
+        ProgramacionFragment.listaProgramacion = progAux;
+    }
+
    private CancionTendencia getTendeciaByPosicion(int pos){
        for(CancionTendencia t:tendencias){
            if(t.getPosicion() == pos){
@@ -302,7 +322,7 @@ public class ProgramacionAdminFragment extends Fragment {
 
             JSONArray jsonProgramacion = jsonResult.getJSONArray("programacion");
             //for(int i = 0; i < jsonTendencias.length(); i++) {
-            for(int i = 0; i < 10; i++) {
+            for(int i = 0; i < jsonProgramacion.length(); i++) {
                 if(jsonProgramacion.length() > 0){
                     JSONObject prog = (JSONObject) jsonProgramacion.get(i);
                     ProgramacionFragment.listaProgramacion.add(new Programacion(prog.getString("dia"), prog.getString("hora"), prog.getString("titulo")));
@@ -313,7 +333,7 @@ public class ProgramacionAdminFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //ordenarProgramacion();
+        ordenarProgramacion();
         lvProgramacion.setAdapter(new ProgramacionAdapter());
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -509,15 +529,51 @@ public class ProgramacionAdminFragment extends Fragment {
 
                     cargarProgramaciones(result);
 
-                    Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(), "Lista obtenida", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
-            else{
-                Toast.makeText(getActivity(), "Lista no obtenida", Toast.LENGTH_SHORT).show();
-            }
+
         }
     }
+
+    /*public class ExecuteDeleteProgramacion extends AsyncTask<String, Void, String> {
+        boolean isOk = false;
+        String hora;
+        String dia;
+
+        public ExecuteDeleteProgramacion(String dia, String hora) {
+            this.dia=dia;
+            this.hora=hora;
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            API_Access api = API_Access.getInstance();
+            //Usuario_Singleton user = Usuario_Singleton.getInstance();
+
+            isOk = api.deleteProgramacion(Streaming.getIdEmisora(),dia,hora);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if(isOk){
+
+                    Toast.makeText(getActivity(), "Programacion borrada", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }*/
 }
