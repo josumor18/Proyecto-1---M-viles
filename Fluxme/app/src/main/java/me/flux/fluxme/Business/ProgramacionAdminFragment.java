@@ -1,9 +1,11 @@
 package me.flux.fluxme.Business;
 
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,8 @@ public class ProgramacionAdminFragment extends Fragment {
     RadioButton rbProgramacion;
     RadioButton rbTendencias;
     RadioGroup rgrp_Opcion;
+
+
 
     public static String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
     public static String[] listHoras = {"0:00 - 1:00","1:00 - 2:00","2:00 - 3:00", "3:00 - 4:00", "4:00 - 5:00",
@@ -197,6 +201,36 @@ public class ProgramacionAdminFragment extends Fragment {
 
                 ExecuteGetProgramacion executeGetProgramacion2 = new ExecuteGetProgramacion();
                 executeGetProgramacion2.execute();
+            }
+        });
+        /*final ProgramacionAdapter arrayAdapter = new ProgramacionAdapter();
+        lvProgramacion.setAdapter(arrayAdapter);*/
+        lvProgramacion.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                final int programacionEliminar = i;
+
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Está seguro?")
+                        .setMessage("Desea eliminar la programacion?")
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Programacion p = ProgramacionFragment.listaProgramacion.get(programacionEliminar);
+                                ExecuteDeleteProgramacion executeDeleteProgramacion = new ExecuteDeleteProgramacion(p.getDia(),p.getHora());
+                                executeDeleteProgramacion.execute();
+
+                                //arrayAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
+                return true;
             }
         });
 
@@ -539,7 +573,7 @@ public class ProgramacionAdminFragment extends Fragment {
         }
     }
 
-    /*public class ExecuteDeleteProgramacion extends AsyncTask<String, Void, String> {
+    public class ExecuteDeleteProgramacion extends AsyncTask<String, Void, String> {
         boolean isOk = false;
         String hora;
         String dia;
@@ -561,7 +595,7 @@ public class ProgramacionAdminFragment extends Fragment {
             API_Access api = API_Access.getInstance();
             //Usuario_Singleton user = Usuario_Singleton.getInstance();
 
-            isOk = api.deleteProgramacion(Streaming.getIdEmisora(),dia,hora);
+            isOk = api.deleteProgramacion(user.getId(),user.getAuth_token(),Streaming.getIdEmisora(),dia,hora);
 
             return null;
         }
@@ -575,5 +609,5 @@ public class ProgramacionAdminFragment extends Fragment {
             }
 
         }
-    }*/
+    }
 }

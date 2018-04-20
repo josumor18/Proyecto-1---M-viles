@@ -89,9 +89,9 @@ public class API_Access {
         String urlEsp = "programacions/getProgramacion?idUser=" + idUser + "&authentication_token=" + auth_token + "&idEmisora=" + idEmisora;
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
-    public boolean deleteProgramacion(String idEmisora,String dia,String hora){
+    public boolean deleteProgramacion(String idUser,String authToken, String idEmisora,String dia,String hora){
         //jsonObjectResponse = new JSONObject();
-        String urlEsp = "programacions/deleteProgramacion?idEmisora=" + idEmisora + "&dia" + dia + "&hora" + hora;
+        String urlEsp = "programacions/deleteProgramacion?idUser=" + idUser + "&authentication_token=" + authToken + "&idEmisora=" + idEmisora + "&dia=" + dia + "&hora=" + hora;
         return makeDELETERequest(urlEsp, "DELETE", HttpsURLConnection.HTTP_OK);
 
     }
