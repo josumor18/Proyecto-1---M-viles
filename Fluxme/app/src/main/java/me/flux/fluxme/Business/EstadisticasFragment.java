@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -21,8 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import me.flux.fluxme.Data.API_Access;
 import me.flux.fluxme.R;
@@ -35,7 +38,7 @@ public class EstadisticasFragment extends Fragment {
     private PieChart pieChart;
     private ListView votosListView;
 
-    private ArrayList<String> votaciones = new ArrayList<>();
+    private ArrayList<Voto> votaciones = new ArrayList<>();
 
 
     public EstadisticasFragment() {
@@ -59,11 +62,14 @@ public class EstadisticasFragment extends Fragment {
         ExecuteGetUbicaciones executeGetUbicaciones = new ExecuteGetUbicaciones();
         executeGetUbicaciones.execute();
 
+        ExecuteGetVotos executeGetVotos = new ExecuteGetVotos();
+        executeGetVotos.execute();
+
         return view;
     }
 
     private void cargarUbicaciones(JSONObject jsonResult) {
-        ArrayList<PieEntry> yEntry = new ArrayList<>();
+        ArrayList<Integer> yEntry = new ArrayList<>();
         ArrayList<String> xEntry = new ArrayList<>();
 
         try {
@@ -71,7 +77,6 @@ public class EstadisticasFragment extends Fragment {
             for(int i = 0; i < jsonUbicaciones.length(); i++) {
                 JSONObject jsonUbiacion = (JSONObject) jsonUbicaciones.get(i);
 
-                yEntry.add(new PieEntry(1, i));
                 xEntry.add(jsonUbiacion.getString("pais"));
 
             }
@@ -79,11 +84,29 @@ public class EstadisticasFragment extends Fragment {
             e.printStackTrace();
         }
 
-        if (yEntry.isEmpty()) {
+        for (int i = 0; i < xEntry.size(); i++) {
+            int cantidad = 1;
+            for (int j = i + 1; j < xEntry.size(); j++) {
+                if (xEntry.get(i).equals(xEntry.get(j))) {
+                    xEntry.remove(j);
+                    j--;
+                    cantidad++;
+                }
+            }
+            yEntry.add(cantidad);
+        }
+
+        List<PieEntry> pieEntries = new ArrayList<>();
+
+        for (int i = 0; i < xEntry.size(); i++) {
+            pieEntries.add(new PieEntry(yEntry.get(i), xEntry.get(i)));
+        }
+
+        if (pieEntries.isEmpty()) {
             pieChart.setCenterText("No hay datos de ubicación");
         }
 
-        PieDataSet pieDataSet = new PieDataSet(yEntry, "Y");
+        PieDataSet pieDataSet = new PieDataSet(pieEntries,"Paises");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
 
@@ -112,24 +135,74 @@ public class EstadisticasFragment extends Fragment {
 
         PieData pieData = new PieData(pieDataSet);
         pieChart.setData(pieData);
+        pieChart.animateY(1000);
         pieChart.invalidate();
     }
 
     private void cargarVotos(JSONObject jsonResult) {
+
         try {
-            JSONArray jsonComentarios = jsonResult.getJSONArray("localizaciones");
+            JSONArray jsonComentarios = jsonResult.getJSONArray("historico");
             for(int i = 0; i < jsonComentarios.length(); i++) {
                 JSONObject jsonVoto = (JSONObject) jsonComentarios.get(i);
-                //Comentario comentario = new Comentario();
-                //comentario.comentarista = jsoncomentario.getString("comentarista");
-                //comentario.fechaHora = jsoncomentario.getString("created_at");
-                //comentario.texto = jsoncomentario.getString("cuerpo");
+
+                votaciones.add(new Voto(jsonVoto.getString("cancion"), jsonVoto.getString("votos")));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //votosListView.setAdapter(arrayAdapter);
+        votosListView.setAdapter(new VotosAdapter());
+
+    }
+
+    private class Voto {
+
+        String nombre;
+        String voto;
+
+        Voto(String nombre, String voto) {
+            this.nombre = nombre;
+            this.voto = voto;
+        }
+    }
+
+    private class VotosAdapter extends BaseAdapter {
+
+        public VotosAdapter() {
+            super();
+        }
+
+        @Override
+        public int getCount() {
+            return votaciones.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return votaciones.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            LayoutInflater inflater = getLayoutInflater();
+            if (view == null) {
+                view = inflater.inflate(R.layout.custom_votos, null);
+            }
+
+            TextView txtNombre = view.findViewById(R.id.cancion_voto);
+            TextView txtVoto = view.findViewById(R.id.cantidad_voto);
+
+            Voto voto = votaciones.get(i);
+            txtNombre.setText(voto.nombre);
+            txtVoto.setText(voto.voto + " Votos");
+            return view;
+        }
     }
 
     private class ExecuteGetUbicaciones extends android.os.AsyncTask<String, Void, String> {
