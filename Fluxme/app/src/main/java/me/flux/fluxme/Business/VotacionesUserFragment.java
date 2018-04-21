@@ -64,9 +64,11 @@ public class VotacionesUserFragment extends Fragment {
                 Cancion nCan = new Cancion(cancion.getInt("id"),cancion.getString("cancion"));
                 canciones.add(nCan);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        lvVotaciones.setAdapter(new CancionesAdapter());
         ExecuteGetVotos executeGetVotos = new ExecuteGetVotos();
         executeGetVotos.execute();
     }
@@ -95,11 +97,13 @@ public class VotacionesUserFragment extends Fragment {
             for(Cancion v:votadas){
                 if(canciones.get(i).id == v.id){
                     seleccionadas.add(true);
+                    canciones.get(i).votada = true;
                     col = true;
                 }
             }
             if(!col){
                 seleccionadas.add(false);
+                canciones.get(i).votada = false;
             }
         }
     }
@@ -148,7 +152,7 @@ public class VotacionesUserFragment extends Fragment {
             });
 
             txtTitulo.setText(canciones.get(i).cancion);
-            if(seleccionadas.get(i)){
+            if(canciones.get(i).votada){
                 imgEequis.setImageResource(R.drawable.tab_votar_verde);
             }else{
                 imgEequis.setImageResource(R.drawable.tab_votar_des);
@@ -222,7 +226,7 @@ public class VotacionesUserFragment extends Fragment {
             if(isOk){
                 cargarListViewCanciones(API_Access.getInstance().getJsonObjectResponse());
             }else{
-                String mensaje = "Error al obtener las canciones";
+                String mensaje = "Error al obtener los votos";
 
                 Toast.makeText(getActivity(), mensaje, Toast.LENGTH_SHORT).show();
             }
@@ -253,7 +257,7 @@ public class VotacionesUserFragment extends Fragment {
         protected String doInBackground(String... strings) {
             API_Access api = API_Access.getInstance();
             Usuario_Singleton user = Usuario_Singleton.getInstance();
-            isOk = api.addVoto(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), id_cancion, nom_cancion);
+            isOk = api.addVoto(user.getId(), user.getAuth_token(), Streaming.getIdEmisora(), id_cancion);
 
             return null;
         }
@@ -286,10 +290,12 @@ public class VotacionesUserFragment extends Fragment {
     private class Cancion{
         int id;
         String cancion;
+        boolean votada;
 
         public Cancion(int id, String cancion) {
             this.id = id;
             this.cancion = cancion;
+            this.votada = false;
         }
     }
 }

@@ -223,14 +223,13 @@ public class API_Access {
         return makeGETRequest(urlEsp, "GET", HttpsURLConnection.HTTP_OK);
     }
 
-    public boolean addVoto(String id_user, String auth_token, String id_emisora, String id_cancion, String nom_cancion){
+    public boolean addVoto(String id_user, String auth_token, String id_emisora, String id_cancion){
         jsonObjectResponse = new JSONObject();
         HashMap<String, String> Parametros = new HashMap<String, String>();
         Parametros.put("id_user", id_user);
         Parametros.put("authentication_token", auth_token);
         Parametros.put("id_emisora", id_emisora);
         Parametros.put("id_cancion", id_cancion);
-        Parametros.put("nom_cancion", nom_cancion);
         return makePOSTRequest("votaciones/add_voto", "POST", true, true, Parametros, HttpsURLConnection.HTTP_OK);
     }
 
