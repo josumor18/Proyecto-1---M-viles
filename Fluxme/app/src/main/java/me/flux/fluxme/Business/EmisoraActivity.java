@@ -107,11 +107,11 @@ public class EmisoraActivity extends BaseActivity {
                             fragmentTransaction.replace(R.id.contenedor, estadisticasFragment);
                             fragmentTransaction.commit();
                         }else{
-                            VotacionesUserFragment votacionesUserFragment = new VotacionesUserFragment();
+                            /*VotacionesUserFragment votacionesUserFragment = new VotacionesUserFragment();
 
                             fragmentTransaction = getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.contenedor, votacionesUserFragment);
-                            fragmentTransaction.commit();
+                            fragmentTransaction.commit();*/
                         }
 
                         break;
@@ -148,11 +148,11 @@ public class EmisoraActivity extends BaseActivity {
                         break;
                     case 5:
                         if (Usuario_Singleton.getInstance().isAdmin()){
-                            VotacionesAdminFragment votacionesAdminFragment = new VotacionesAdminFragment();
+                            /*VotacionesAdminFragment votacionesAdminFragment = new VotacionesAdminFragment();
 
                             fragmentTransaction = getSupportFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.contenedor, votacionesAdminFragment);
-                            fragmentTransaction.commit();
+                            fragmentTransaction.commit();*/
                         }
                         break;
                 }
