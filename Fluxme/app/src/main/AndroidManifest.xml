@@ -74,6 +74,9 @@
 
         <activity android:name=".Business.PerfilActivity" />
         <activity android:name=".Business.EmisorasFavoritasActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="adce5ace57bf084404f78eb56855a16a18128058" />
     </application>
 
 </manifest>
