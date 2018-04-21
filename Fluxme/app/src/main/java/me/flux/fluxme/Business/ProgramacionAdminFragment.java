@@ -1,9 +1,11 @@
 package me.flux.fluxme.Business;
 
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,15 +53,17 @@ public class ProgramacionAdminFragment extends Fragment {
     RadioButton rbTendencias;
     RadioGroup rgrp_Opcion;
 
+
+
     public static String[] listDias = {"Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"};
-    public static String[] listHoras = {"0:00 - 1:00","1:00 - 2:00","2:00 - 3:00", "3:00 - 4:00", "4:00 - 5:00",
-                            "5:00 - 6:00","6:00 - 7:00","7:00 - 8:00", "8:00 - 9:00", "9:00 - 10:00",
-                            "10:00 - 11:00","11:00 - 12:00","12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00",
-                            "15:00 - 16:00","16:00 - 17:00","17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
-                            "20:00 - 21:00","21:00 - 22:00","22:00 - 23:00", "23:00 - 23:00", "23:00 - 24:00"};
+    public static String[] listHoras = {"0:00-1:00","1:00-2:00","2:00-3:00", "3:00-4:00", "4:00-5:00",
+                            "5:00-6:00","6:00-7:00","7:00-8:00", "8:00-9:00", "9:00-10:00",
+                            "10:00-11:00","11:00-12:00","12:00-13:00", "13:00-14:00", "14:00-15:00",
+                            "15:00-16:00","16:00-17:00","17:00-18:00", "18:00-19:00", "19:00-20:00",
+                            "20:00-21:00","21:00-22:00","22:00-23:00", "23:00-23:00", "23:00-24:00"};
 
     String diaSelect = listDias[0];
-    String horaSelect = listHoras [0];
+    String horaSelect = listHoras [0].replaceAll(" ","");
 
     Streaming streaming;
     Usuario_Singleton user;
@@ -158,7 +162,7 @@ public class ProgramacionAdminFragment extends Fragment {
             {
                 //Change the selected item's text color
                 ((TextView) view).setTextColor(getResources().getColor(R.color.colorPrimary));
-                horaSelect = listHoras[spHora.getSelectedItemPosition()];
+                horaSelect = listHoras[spHora.getSelectedItemPosition()].replaceAll(" ","");
                 //Toast.makeText(getActivity(), horaSelect, Toast.LENGTH_SHORT).show();
             }
 
@@ -197,6 +201,39 @@ public class ProgramacionAdminFragment extends Fragment {
 
                 ExecuteGetProgramacion executeGetProgramacion2 = new ExecuteGetProgramacion();
                 executeGetProgramacion2.execute();
+            }
+        });
+        /*final ProgramacionAdapter arrayAdapter = new ProgramacionAdapter();
+        lvProgramacion.setAdapter(arrayAdapter);*/
+        lvProgramacion.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                final int programacionEliminar = i;
+
+                new AlertDialog.Builder(getActivity())
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Está seguro?")
+                        .setMessage("Desea eliminar la programacion?")
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Programacion p = ProgramacionFragment.listaProgramacion.get(programacionEliminar);
+                                ExecuteDeleteProgramacion executeDeleteProgramacion = new ExecuteDeleteProgramacion(p.getDia(),p.getHora().replace(" ",""));
+                                executeDeleteProgramacion.execute();
+
+                                ExecuteGetProgramacion executeGetProgramacion3 = new ExecuteGetProgramacion();
+                                executeGetProgramacion3.execute();
+
+                                //arrayAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
+                return true;
             }
         });
 
@@ -539,7 +576,7 @@ public class ProgramacionAdminFragment extends Fragment {
         }
     }
 
-    /*public class ExecuteDeleteProgramacion extends AsyncTask<String, Void, String> {
+    public class ExecuteDeleteProgramacion extends AsyncTask<String, Void, String> {
         boolean isOk = false;
         String hora;
         String dia;
@@ -561,7 +598,7 @@ public class ProgramacionAdminFragment extends Fragment {
             API_Access api = API_Access.getInstance();
             //Usuario_Singleton user = Usuario_Singleton.getInstance();
 
-            isOk = api.deleteProgramacion(Streaming.getIdEmisora(),dia,hora);
+            isOk = api.deleteProgramacion(user.getId(),user.getAuth_token(),Streaming.getIdEmisora(),dia,hora);
 
             return null;
         }
@@ -575,5 +612,5 @@ public class ProgramacionAdminFragment extends Fragment {
             }
 
         }
-    }*/
+    }
 }
